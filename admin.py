@@ -5,7 +5,7 @@ from backend_controller.productsController import *
 from backend_controller.accountsController import *
 from backend_controller.reportsController import getDatedReport, getStockReport
 from backend_controller.profileController import *
-
+# FUnciona bien!
 # In this template, you will usually find functions with comments tying them to a specific controller
 # main.py accesses the frontend folders
 # Every controller accesses its relevant model and will send the information back to this Flask app
