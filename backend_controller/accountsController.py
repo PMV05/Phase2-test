@@ -8,3 +8,4 @@ def getaccounts(userType):
 def getaccount(acc):
     return getaccountmodel(acc)
 
+    
