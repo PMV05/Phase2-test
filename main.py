@@ -132,7 +132,8 @@ def shop():
     brands = getBrands()
     colors = getColors()
     modelType = getTypeModel()
-    microphone = getMicrophoneModel()
+    connectivity = getConnectivityModel()
+    earPlacement = getEarPlacement()
 
     # Set the amount of items user currently has in cart
     amount = 3
@@ -146,7 +147,7 @@ def shop():
 
     # Redirect to shop page with the variables used
     return render_template("shop-4column.html", products=products, amount=amount, total=total, brands=brands,
-                           colors=colors, modelType=modelType, microphone=microphone)
+                           colors=colors, modelType=modelType, connectivity=connectivity, earPlacement=earPlacement)
 
 #TODO: VEIFICAR EL CODIGO DE LA PROFE
 @app.route("/profile")

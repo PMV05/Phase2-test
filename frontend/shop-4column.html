@@ -279,11 +279,11 @@
 
 
                         <div class="shop-widget">
-                            <h6 class="shop-widget-title">Filter by Microphone Availability</h6>
+                            <h6 class="shop-widget-title">Filter by Connectivity</h6>
                             <form>
                                 <ul class="shop-widget-list">
 
-                        {% for w in microphone %}
+                        {% for w in connectivity %}
                             <li>
                                 <div class="shop-widget-content">
                                     <input type="checkbox" id="tag4" name="check" onclick="onlyOne(this)">
@@ -296,7 +296,31 @@
                          </ul>
                                 <button class="shop-widget-btn">
                                     <i class="fas fa-search"></i>
-                                    <span>Search by Microphone</span>
+                                    <span>Search by Connectivity</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        
+                        <div class="shop-widget">
+                            <h6 class="shop-widget-title">Filter by Ear Placement</h6>
+                            <form>
+                                <ul class="shop-widget-list">
+
+                        {% for e in earPlacement %}
+                            <li>
+                                <div class="shop-widget-content">
+                                    <input type="checkbox" id="tag4" name="check" onclick="onlyOne(this)">
+                                    <label for="tag1">{{e}}</label>
+                                </div>
+
+                            </li>
+                        {% endfor %}
+
+                         </ul>
+                                <button class="shop-widget-btn">
+                                    <i class="fas fa-search"></i>
+                                    <span>Search by Ear Placement</span>
                                 </button>
                             </form>
                         </div>
@@ -336,19 +360,19 @@
                                 <div class="product-card">
                                     <div class="product-media">
 
-                                        <a class="product-image" href="static/images/product-images/{{product[7]}}">
-                                            <img src="static/images/product-images/{{product[7]}}" alt="product">
+                                        <a class="product-image" href="static/images/product-images/{{product['image']}}">
+                                            <img src="static/images/product-images/{{product['image']}}" alt="product">
                                         </a>
                                         <div class="product-widget">
-                                            <a title="Product View" href="#" class="fas fa-eye" data-bs-toggle="modal" data-bs-target="#product-view-{{product[0]}}"></a>
+                                            <a title="Product View" href="#" class="fas fa-eye" data-bs-toggle="modal" data-bs-target="#product-view-{{product['ID']}}"></a>
                                         </div>
                                     </div>
                                     <div class="product-content">
                                         <h6 class="product-name">
-                                            <a href="product-video.html">{{product[1]}}</a>
+                                            <a href="product-video.html">{{product['name']}}</a>
                                         </h6>
                                         <h6 class="product-price">
-                                            <span>${{product[10]}}</span>
+                                            <span>${{product['price']}}</span>
                                         </h6>
                                         <button class="product-add" title="Add to Cart">
                                             <i class="fas fa-shopping-basket"></i>
@@ -357,23 +381,23 @@
                                         <div class="product-action">
                                             <form action="{{url_for('addcart')}}" method="post">
                                             <input style="width: 50%" class="action-input" title="Quantity Number" type="number" id="quantity" name="quantity" value="1">
-                                               <input type="hidden" id="p_id" name="p_id" value="{{product[0]}}">
-                                               <input type="hidden" id="name" name="name" value="{{product[1]}}">
-                                                <input type="hidden" id="price" name="price" value="{{product[10]}}">
-                                                <input type="hidden" id="cost" name="cost" value="{{product[11]}}">
-                                                <input type="hidden" id="stock" name="stock" value="{{product[8]}}">
-                                                <input type="hidden" id="brand" name="brand" value="{{product[2]}}">
-                                                <input type="hidden" id="wifi" name="wifi" value="{{product[4]}}">
-                                                <input type="hidden" id="videores" name="videores" value="{{product[5]}}">
-                                                <input type="hidden" id="desc" name="desc" value="{{product[3]}}">
-                                                <input type="hidden" id="image" name="image" value="{{product[7]}}">
+                                               <input type="hidden" id="p_id" name="p_id" value="{{product['ID']}}">
+                                               <input type="hidden" id="name" name="name" value="{{product['name']}}">
+                                                <input type="hidden" id="price" name="price" value="{{product['price']}}">
+                                                <input type="hidden" id="cost" name="cost" value="{{product['cost']}}">
+                                                <input type="hidden" id="stock" name="stock" value="{{product['quantity']}}">
+                                                <input type="hidden" id="brand" name="brand" value="{{product['brand']}}">
+                                                <input type="hidden" id="connectivity" name="connectivity" value="{{product['connetivity']}}">
+                                                <input type="hidden" id="earplacement" name="earplacement" value="{{product['earplacement']}}">
+                                                <input type="hidden" id="desc" name="desc" value="{{product['description']}}">
+                                                <input type="hidden" id="image" name="image" value="{{product['image']}}">
                                               <input style="width: 30%" type="submit" value="Add">
                                               </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-        <div class="modal fade" id="product-view-{{product[0]}}">
+        <div class="modal fade" id="product-view-{{product['ID']}}">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <button class="modal-close icofont-close" data-bs-dismiss="modal"></button>
@@ -382,10 +406,10 @@
                             <div class="col-md-6 col-lg-6">
                                 <div class="view-gallery">
                                     <div class="view-label-group">
-                                        <label class="view-label new">{{product[8]}} in stock</label>
+                                        <label class="view-label new">{{product['quantity']}} in stock</label>
                                     </div>
                                     <ul class="preview-slider">
-                                        <li><img src="static/images/product-images/{{product[7]}}" alt="product"></li>
+                                        <li><img src="static/images/product-images/{{product['image']}}" alt="product"></li>
                                     </ul>
 
                                 </div>
@@ -393,18 +417,17 @@
                             <div class="col-md-6 col-lg-6">
                                 <div class="view-details">
                                     <h3 class="view-name">
-                                        <a href="product-video.html">{{product[1]}}</a>
+                                        <a href="product-video.html">{{product['name']}}</a>
                                     </h3>
                                     <div class="view-meta">
-                                        <p>Brand:<span>{{product[2]}}</span></p><br>
-                                        <p>Microphone: {{product[4]}}</p><br>
-                                        <p>Model Type: {{product[5]}}</p>
+                                        <p>Brand:<span>{{product['brand']}}</span></p><br>
+                                        <p>Connectivity: {{product['connectivity']}}</p><br>
+                                        <p>Model Type: {{product['model_type']}}</p>
                                     </div>
                                     <h3 class="view-price">
-                                        <span>${{product[10]}}</span>
+                                        <span>${{product['price']}}</span>
                                     </h3>
-                                    <p class="view-desc">Apple Auriculares inalámbricos AirPods 4, auriculares Bluetooth, 
-                                        audio espacial personalizado, resistente al sudor y al agua, color blanco, modelo earphone con microfono.</p>
+                                    <p class="view-desc">{{product['description']}}</p>
                                     <div class="view-add-group">
                                         <button class="product-add" title="Add to Cart">
                                             <span>Tap to add amount</span>

@@ -14,9 +14,9 @@ def getColors():
     return getColorsModel()
 
 # TODO:
-def getVideoRes():
-    return getVideoResModel()
+def getEarPlacement():
+    return getEarPlacementModel()
 
 # TODO:
-def getWifi():
-    return getWifiModel()
+def getConnectivity():
+    return getConnectivityModel()
