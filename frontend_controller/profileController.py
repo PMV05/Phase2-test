@@ -10,12 +10,12 @@ def getAddress(customer):
 def editnumbercontroller(number):
     return editnumbermodel(number)
 
-def addaddresscontroller(aline1, aline2, state, zipcode, city):
-    return addaddressmodel(aline1, aline2, state, zipcode, city)
+def addaddresscontroller(aline1, state, zipcode, city):
+    return addaddressmodel(aline1, state, zipcode, city)
 
 
-def editaddresscontroller(aline1, aline2, state, zipcode, city, a_id):
-    return editaddressmodel(aline1, aline2, state, zipcode, city, a_id)
+def editaddresscontroller(aline1, state, zipcode, city, a_id):
+    return editaddressmodel(aline1, state, zipcode, city, a_id)
 
 def getpaymentcontroller():
     return getpaymentmodel(session['customer'])

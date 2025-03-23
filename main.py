@@ -99,6 +99,7 @@ def register(message):
 # TODO: VERIFICAR LO QUE HAY EN EL TEMPLATE DE LA PROFESORA
 @app.route("/registerinfo", methods=['POST'])
 def registerinfo():
+    # TO BE ADDED BY STUDENTS
     # Processs the register info
     fname = request.form.get('fname')
     lname = request.form.get('lname')
@@ -106,17 +107,10 @@ def registerinfo():
     pass1 = request.form.get('pass1')
     pass2 = request.form.get('pass2')
 
-    if pass1 == pass2:
-        # Process register info here
-        # Since it will not be functioning right now, let's simulate we registered with our usual login info:
-        session['amount'] = 0
-        email = 'javier.quinones3@upr.edu'
-        passcode = 'pass1234'
-        logincontroller(email=email, password=passcode)
+    # logincontroller.py -> registercontroller(_)
+    routeName = registercontroller(fname, lname, email, pass1, pass2)
 
-        return redirect('/shop')
-    else:
-        return redirect('/register/<message>')
+    return redirect(routeName)
 
 
 @app.route("/shop")
@@ -150,25 +144,18 @@ def shop():
     return render_template("shop-4column.html", products=products, amount=amount, total=total, brands=brands,
                            colors=colors, modelType=modelType, connectivity=connectivity, earPlacement=earPlacement)
 
-#TODO: VEIFICAR EL CODIGO DE LA PROFE
+#TODO: 
 @app.route("/profile")
+@login_required
 def profile():
     # To open the user's profile page
     # Get user info from getUser() in profileController
-    user = getUser(session['customer'])
-
-    # Set the cart's total amount for the page
-    total = 507.00 #Cambio del total
-
-    # Formatted phone number for display
-    num = '{:03d}-{:03d}-{:04d}'.format(
-        int(str(user['c_phone_number'])[:3]),
-        int(str(user['c_phone_number'])[3:6]),
-        int(str(user['c_phone_number'])[6:])
-    )
+    user = getUser()
+    ship = getAddress(session['customer'])
+    method = getpaymentcontroller()
 
     # Since I specified the variable as user1, that is how it will be called on the html page
-    return render_template("profile.html", user1=user, total=total, num=num)
+    return render_template("profile.html", user=user, shipping_addresses=ship, payment_methods=method)
 
 # TODO:
 @app.route("/addinfo", methods=["POST"])
@@ -177,11 +164,10 @@ def addinfo():
 
     if postType == 'addaddress':
         aline1 = request.form.get('aline1')
-        aline2 = request.form.get('aline2')
         state = request.form.get('state')
         zipcode = request.form.get('zipcode')
         city = request.form.get('city')
-        addaddresscontroller(aline1, aline2, state, zipcode, city)
+        addaddresscontroller(aline1, state, zipcode, city)
 
     elif postType == 'addpayment':
         print("STUDENTS MUST ADD THE ADD PAYMENT METHOD FUNCTION")
@@ -197,12 +183,11 @@ def editinfo():
     # If editing address info, edit address -> profileController
     if postType == 'editaddress':
         aline1 = request.form.get('aline1')
-        aline2 = request.form.get('aline2')
         state = request.form.get('state')
         zipcode = request.form.get('zipcode')
         city = request.form.get('city')
         a_id = request.form.get('a_id')
-        editaddresscontroller(aline1, aline2, state, zipcode, city, a_id)
+        editaddresscontroller(aline1, state, zipcode, city, a_id)
 
     # If editing payment info -> profileController
     elif postType == 'editpayment':

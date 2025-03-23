@@ -182,6 +182,7 @@
         <!--=====================================
                     PROFILE PART START
         =======================================-->
+        {% for user1 in user%}
         <section class="inner-section profile-part">
             <div class="container">
                 <div class="row">
@@ -196,19 +197,19 @@
                                     <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
                                             <label class="form-label">name</label>
-                                            <input class="form-control" type="text" placeholder="{{user1['c_first_name']}}">
+                                            <input class="form-control" type="text" placeholder="{{user1['first_name']}}">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
                                             <label class="form-label">last name</label>
-                                            <input class="form-control" type="text" placeholder="{{user1['c_last_name']}}">
+                                            <input class="form-control" type="text" placeholder="{{user1['last_name']}}">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
                                             <label class="form-label">Email</label>
-                                            <input class="form-control" type="email" placeholder="{{user1['c_email']}}">
+                                            <input class="form-control" type="email" placeholder="{{user1['email']}}">
                                         </div>
                                     </div>
                                     <div class="col-lg-2">
@@ -248,9 +249,9 @@
                                 <div class="row">
                                     <div class="col-md-6 col-lg-4 alert fade show">
                                         <div class="profile-card address active">
-                                            <p>{{user1['c_address_line_1']}}</p><br>
-                                            <p>{{user1['c_address_line_2']}}</p><br>
-                                            <p>{{user1['c_city']}}, {{user1['c_state']}} {{user1['c_zipcode']}}</p>
+                                            <p>{{user1['street']}}</p><br>
+                                            <!-- <p>{{user1['c_address_line_2']}}</p><br> -->
+                                            <p>{{user1['city']}}, {{user1['state']}} {{user1['postal_code']}}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -280,6 +281,7 @@
                 </div>
             </div>
         </section>
+        {% endfor %}
         <!--=====================================
                     PROFILE PART END
         =======================================-->
@@ -299,7 +301,7 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">number</label>
-                            <input class="form-control" name="number" type="number" value="{{user1['c_phone_number']}}">
+                            <input class="form-control" name="number" type="number" value="{{user1['phone_number']}}">
                         </div>
                         <button class="form-btn" type="submit">save contact number</button>
                         <input type="hidden" name="page" value="/profile">
@@ -320,23 +322,23 @@
 
                         <div class="form-group">
                             <label class="form-label">Address Line 1</label>
-                            <input type="text" name="aline1" class="form-control" value="{{user1['c_address_line_1']}}"></input>
+                            <input type="text" name="aline1" class="form-control" value="{{user1['address_line_1']}}"></input>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label class="form-label">Address Line 2</label>
                             <input type="text" name="aline2" class="form-control" value="{{user1['c_address_line_2']}}"></input>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label class="form-label">City</label>
-                            <input type="text" name="city" class="form-control" value="{{user1['c_city']}}"></input>
+                            <input type="text" name="city" class="form-control" value="{{user1['city']}}"></input>
                         </div>
                         <div class="form-group">
                             <label class="form-label">State</label>
-                            <input type="text" name="state" class="form-control" value="{{user1['c_state']}}"></input>
+                            <input type="text" name="state" class="form-control" value="{{user1['state']}}"></input>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Zipcode</label>
-                            <input type="text" name="zipcode" class="form-control" value="{{user1['c_zipcode']}}"></input>
+                            <input type="text" name="zipcode" class="form-control" value="{{user1['postal_code']}}"></input>
                         </div>
                         <button class="form-btn" type="submit">save address info</button>
                         <input type="hidden" name="page" value="/profile">
@@ -390,15 +392,15 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">First Name</label>
-                            <input class="form-control" name="fname" type="text" value="{{user1['c_first_name']}}">
+                            <input class="form-control" name="fname" type="text" value="{{user1['first_name']}}">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Last Name</label>
-                            <input class="form-control" name="lname" type="text" value="{{user1['c_last_name']}}">
+                            <input class="form-control" name="lname" type="text" value="{{user1['last_name']}}">
                         </div>
                         <div class="form-group">
                             <label class="form-label">email</label>
-                            <input class="form-control" name="email" type="text" value="{{user1['c_email']}}">
+                            <input class="form-control" name="email" type="text" value="{{user1['email']}}">
                         </div>
                         <input type="hidden" name="page" id="page" value="/profile">
                         <button class="form-btn" type="submit">save profile info</button>

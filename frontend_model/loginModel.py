@@ -30,14 +30,14 @@ def loginmodel(email, password):
 
     user = []
     db = Dbconnect()
-    sql = "SELECT c_email, c_id, c_password, c_status FROM customer WHERE c_email = %s"
+    sql = "SELECT email, ID, password, status FROM Customer WHERE email = %s"
     # Save user info in list
     userFound = db.select(sql, (email,))
 
     print(userFound)
 
     for res in userFound:
-        user.append({"id": res['c_id'], "email": res['c_email'], "password": res['c_password'], "status": res['c_status']})
+        user.append({"id": res['ID'], "email": res['email'], "password": res['password'], "status": res['status']})
 
 
     # Save user info in list
@@ -55,6 +55,17 @@ def loginmodel(email, password):
             return "false"
 
 
-def registermodel(fname, lname, email, hash):
-    # TODO: TO BE ADDED BY STUDENTS
-    return False
+def registermodel(fname, lname, email, password):
+    db = Dbconnect()
+
+    # TODO: Falta verificar que el usuario no esté en la base de datos
+            
+    sql = "INSERT INTO Customer (first_name, last_name, email, password, status) VALUES (%s, %s, %s, %s, %s)" 
+
+    status = 'active'
+
+    hash_password = sha256_crypt.encrypt(password)
+    
+    db.execute(sql, (fname, lname, email, hash_password, status))
+
+    return True
