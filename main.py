@@ -155,7 +155,7 @@ def profile():
     method = getpaymentcontroller()
 
     # Since I specified the variable as user1, that is how it will be called on the html page
-    return render_template("profile.html", user=user, shipping_addresses=ship, payment_methods=method)
+    return render_template("profile.html", user1=user, shipping_addresses=ship, payment_methods=method)
 
 # TODO:
 @app.route("/addinfo", methods=["POST"])
