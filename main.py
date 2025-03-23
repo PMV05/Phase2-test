@@ -38,9 +38,9 @@ def enterpage(message): # TODO:
     if message is None:
         return redirect("/shop")
     elif message is 'enter':
-        return render_template('login (2).html')
+        return render_template('log.html')
     else:
-        return render_template('login (2).html', message=message)
+        return render_template('log.html', message=message)
 
 @app.route("/change")
 def change():
@@ -49,7 +49,7 @@ def change():
     # Access this function by typing the word 'change' after your Flask url
     # http://127.0.0.1:5000/change
     changePass()
-    return render_template("login (2).html")
+    return render_template("log.html")
 
 # TODO:
 @app.route("/clear")
