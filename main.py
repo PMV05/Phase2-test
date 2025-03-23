@@ -30,17 +30,18 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# Redirects us here if no url is given
 @app.route("/", defaults={'message': None})
-# Or if any url other than the ones set in this Flask application is provided, making it a <message>
 @app.route("/<message>")
-def enterpage(message): # TODO:
+def enterpage(message):
     if message is None:
         return redirect("/shop")
-    elif message is 'enter':
-        return render_template('log.html')
+    elif message == 'enter':
+        return render_template('log.html', message=None)  # No enviar mensaje
+    elif message == 'wrong':
+        return render_template('log.html', message='Login credentials are incorrect. Please try again.')
     else:
-        return render_template('log.html', message=message)
+        return render_template('log.html', message=None)
+
 
 @app.route("/change")
 def change():

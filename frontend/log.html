@@ -64,10 +64,11 @@
                                 <h2>welcome!</h2>
                                 <p>Use your credentials to access</p>
                                 {% if message == 'wrong' %}
-                                    <h2 style="color: red">Login to check out properly.</h2>
-                                {% elif message != None %}
-                                    <h2 style="color: red">Login credentials are incorrect. Please try again.</h2>
+                                <h2 style="color: red">Login to check out properly.</h2>
+                                {% elif message %}
+                                <h2 style="color: red">{{ message }}</h2>
                                 {% endif %}
+
                             </div>
 
 

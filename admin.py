@@ -17,7 +17,7 @@ app.secret_key = 'akeythatissecret'
 @app.route("/", defaults={'message': None})
 @app.route("/<message>")
 def enterpage(message):
-    return render_template('login (2).html', message=message)
+    return render_template('log.html', message=message)
 
 
 @app.route("/clear")
