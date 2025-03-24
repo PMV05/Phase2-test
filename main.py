@@ -123,6 +123,13 @@ def shop():
     params = []
     query = "SELECT * FROM Product WHERE status = 'active' "
 
+    # Filtro para la búsqueda por nombre
+    searchQuery = request.args.get('search')
+    if searchQuery:
+        query += " AND (LOWER(name) LIKE %s OR LOWER(brand) LIKE %s) "
+        params.append(f"%{searchQuery.lower()}%")
+        params.append(f"%{searchQuery.lower()}%")
+
     # Filtro para la marca
     brandsSelected = request.args.getlist('brands')
     if(brandsSelected):
