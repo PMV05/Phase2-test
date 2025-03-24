@@ -119,6 +119,56 @@ def shop():
     # First we receive the list of products by accessing getProducts() from shopController
     products = getProducts()
 
+    db = Dbconnect()
+    params = []
+    query = "SELECT * FROM Product WHERE status = 'active' "
+
+    # Filtro para la marca
+    brandsSelected = request.args.getlist('brands')
+    if(brandsSelected):
+        numberBrands = ', '.join(['%s'] * len(brandsSelected)) 
+        query += f"and brand IN ({numberBrands})"
+        params.extend(brandsSelected)
+
+    # Filtro para el color
+    colorsSelected = request.args.getlist('color-types')
+    if(request.args.getlist('color-types')):
+        numberColors = ', '.join(['%s'] * len(colorsSelected)) 
+        query += f"and color IN ({numberColors}) "
+        params.extend(colorsSelected)
+
+    # Filtro para el tipo de modelo
+    modelsSelected = request.args.getlist('modelType')
+    if(request.args.getlist('modelType')):
+        numberModels = ', '.join(['%s'] * len(modelsSelected)) 
+        query += f"and model_type IN ({numberModels}) "
+        params.extend(modelsSelected)
+
+    # Filtro para la conecetividad
+    connectivitySelected = request.args.getlist('connectivity')
+    if(request.args.getlist('connectivity')):
+        numberConnectivity = ', '.join(['%s'] * len(connectivitySelected)) 
+        query += f"and connectivity IN ({numberConnectivity})"
+        params.extend(connectivitySelected)
+
+    # Filtro para el ajuste de oreja
+    placementSelected = request.args.getlist('earPlacement')
+    if(request.args.getlist('earPlacement')):
+        numberPlacement = ', '.join(['%s'] * len(placementSelected)) 
+        query += f"and earplacement IN ({numberPlacement}) "
+        params.extend(placementSelected)
+
+    # Filtro para el orden ascendente
+    sortingSelected = request.args.getlist('sortings')
+    orderSelected = request.args.get('sort-order')
+
+    if(sortingSelected and orderSelected):
+        query += f" Order By {', '.join(sortingSelected)} "
+        if(orderSelected == 'descending'):   
+            query += " DESC"
+
+    products = db.select(query, params)
+
     # Then we create the shopping cart by accessing getCart in shopController
     getCart()
 
@@ -142,7 +192,10 @@ def shop():
 
     # Redirect to shop page with the variables used
     return render_template("shop-4column.html", products=products, amount=amount, total=total, brands=brands,
-                           colors=colors, modelType=modelType, connectivity=connectivity, earPlacement=earPlacement)
+                           colors=colors, modelType=modelType, connectivity=connectivity, earPlacement=earPlacement,
+                           brandsSelected=brandsSelected, colorsSelected=colorsSelected, modelsSelected=modelsSelected,
+                           connectivitySelected=connectivitySelected, placementSelected=placementSelected,
+                           sortingSelected=sortingSelected, orderSelected=orderSelected)
 
 #TODO: 
 @app.route("/profile")

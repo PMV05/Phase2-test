@@ -189,172 +189,188 @@
         <section class="inner-section shop-part">
             <div class="container">
                 <div class="row content-reverse">
+
                     <div class="col-lg-3">
+                    <form id="filters-form" action="{{url_for('shop')}}" method="GET">
 
                         <div class="shop-widget">
-                            <h6 class="shop-widget-title">Filter by Price</h6>
-                            <form>
-                                <div class="shop-widget-group">
-                                    <input type="text" placeholder="Min - 00">
-                                    <input type="text" placeholder="Max - 5k">
-                                </div>
-                                <button class="shop-widget-btn">
-                                    <i class="fas fa-search"></i>
-                                    <span>search</span>
-                                </button>
-                            </form>
+                            <a href="{{ url_for('shop') }}" class="shop-widget-btn" style="margin-bottom:5%" type="submit" value="clear"
+                                id="clear-button">
+                                <i class="fas fa-times"></i>
+                                <span>Clear filters</span>
+                            </a>
+
+                            <button class="shop-widget-btn" type="submit" value="all">
+                                <i class="fas fa-search"></i>
+                                <span>Apply All Filters</span>
+                            </button>
                         </div>
 
+                        <div class="shop-widget">
+                            <h6 class="shop-widget-title">Sorting By</h6>
+                            <ul class="shop-widget-list">
+                                <li>
+                                    <div class="shop-widget-content">
+                                        <input type="checkbox" id="sorting-name" name="sortings"
+                                            value="name"
+                                            {% if "name" in sortingSelected %} checked {% endif %}>
+                                        <label for="sorting-name">Name</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="shop-widget-content">
+                                        <input type="checkbox" id="sorting-price" name="sortings"
+                                            value="price"
+                                            {% if "price" in sortingSelected %} checked {% endif %}>
+                                        <label for="sorting-price">Price</label>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="shop-widget-list">
+                                <h6 class="shop-widget-title">Order By</h6>
+                                <ul class="shop-widget-list">
+                                    <li>
+                                        <div class="shop-widget-content">
+                                            <input type="radio" id="order-asc" name="sort-order"
+                                                value="Ascending"
+                                                {% if 'Ascending' == orderSelected %} checked {% endif %}>
+                                            <label for="order-asc">Ascending Price</label>
+                                        </div>
+
+                                    </li>
+                                    <li>
+                                        <div class="shop-widget-content">
+                                            <input type="radio" id="order-desc" name="sort-order"
+                                                value="descending"
+                                                {% if 'descending' ==  orderSelected %} checked {% endif %}>
+                                            <label for="order-desc">Descending Price</label>
+                                        </div>
+
+                                    </li>
+                                </ul>
+                                <button class="shop-widget-btn" type="submit" value="sortings">
+                                    <i class="fas fa-search"></i>
+                                    <span>Sort</span>
+                                </button>
+                        </div>
 
                         <div class="shop-widget">
                             <h6 class="shop-widget-title">Filter by Brand</h6>
-                            <form>
-                                <ul class="shop-widget-list">
+                            <ul class="shop-widget-list">
 
-                        {% for brand in brands %}
-                            <li>
-                                <div class="shop-widget-content">
-                                    <input type="checkbox" id="tag1">
-                                    <label for="tag1">{{brand}}</label>
-                                </div>
+                                {% for b in brands %}
+                                <li>
+                                    <div class="shop-widget-content">
+                                        <input type="checkbox" id="brand-{{ loop.index }}" name="brands"
+                                            value="{{b.get('brand')}}"
+                                            {% if b.get('brand') in brandsSelected %} checked {% endif %}>
+                                        <label for="brand-{{ loop.index }}">{{b.get('brand')}}</label>
+                                    </div>
 
-                            </li>
-                        {% endfor %}
+                                </li>
+                                {% endfor %}
 
-                         </ul>
-                                <button class="shop-widget-btn">
-                                    <i class="fas fa-search"></i>
-                                    <span>Search by brands</span>
-                                </button>
-                            </form>
+                            </ul>
+                            <button class="shop-widget-btn" type="submit" value="brands">
+                                <i class="fas fa-search"></i>
+                                <span>Apply Brands</span>
+                            </button>
                         </div>
-
 
                         <div class="shop-widget">
                             <h6 class="shop-widget-title">Filter by Color</h6>
-                            <form>
-                                <ul class="shop-widget-list">
-
-                        {% for color in colors %}
-                            <li>
-                                <div class="shop-widget-content">
-                                    <input type="checkbox" id="tag3">
-                                    <label for="tag1">{{color}}</label>
-                                </div>
-
-                            </li>
-                        {% endfor %}
-
-                         </ul>
-                                <button class="shop-widget-btn">
-                                    <i class="fas fa-search"></i>
-                                    <span>Search by colors</span>
-                                </button>
-                            </form>
+                            <ul class="shop-widget-list">
+                                {% for c in colors %}
+                                <li>
+                                    <div class="shop-widget-content">
+                                        <input type="checkbox" id="color-{{ loop.index }}" name="color-types"
+                                            value="{{c.get('color')}}"
+                                            {% if c.get('color') in colorsSelected %} checked {% endif %}>
+                                        <label for="color-{{ loop.index }}">{{c.get('color')}}</label>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <button class="shop-widget-btn" type="submit" value="color-types">
+                                <i class="fas fa-search"></i>
+                                <span>Apply Colors</span>
+                            </button>
                         </div>
 
 
                         <div class="shop-widget">
                             <h6 class="shop-widget-title">Filter by Model Type</h6>
-                            <form action="{{url_for('filter')}}" method="post">
-                                <ul class="shop-widget-list">
-
-                        {% for res in modelType %}
-                            <li>
-                                <div class="shop-widget-content">
-                                    <input type="checkbox" id="{{res}}" name="modelType" value="{{res}}">
-                                    <label for="tag1">{{res}}</label>
-                                </div>
-
-                            </li>
-                        {% endfor %}
-
-                         </ul>
-                                <button class="shop-widget-btn">
-                                    <i class="fas fa-search"></i>
-                                    <span>Search by Model Type</span>
-                                </button>
-                            </form>
+                            <ul class="shop-widget-list">
+                                {% for m in modelType %}
+                                <li>
+                                    <div class="shop-widget-content">
+                                        <input type="checkbox" id="modelType{{ loop.index }}" name="modelType"
+                                            value="{{m.get('model_type')}}"
+                                            {% if m.get('model_type') in modelsSelected %} checked {% endif %}>
+                                        <label for="modelType{{ loop.index }}">{{m.get('model_type')}}</label>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <button class="shop-widget-btn" type="submit" value="modelType">
+                                <i class="fas fa-search"></i>
+                                <span>Apply Model Type</span>
+                            </button>
                         </div>
-
 
                         <div class="shop-widget">
                             <h6 class="shop-widget-title">Filter by Connectivity</h6>
-                            <form>
-                                <ul class="shop-widget-list">
-
-                        {% for w in connectivity %}
-                            <li>
-                                <div class="shop-widget-content">
-                                    <input type="checkbox" id="tag4" name="check" onclick="onlyOne(this)">
-                                    <label for="tag1">{{w}}</label>
-                                </div>
-
-                            </li>
-                        {% endfor %}
-
-                         </ul>
-                                <button class="shop-widget-btn">
-                                    <i class="fas fa-search"></i>
-                                    <span>Search by Connectivity</span>
-                                </button>
-                            </form>
+                            <ul class="shop-widget-list">
+                                {% for n in connectivity %}
+                                <li>
+                                    <div class="shop-widget-content">
+                                        <input type="checkbox" id="connectivity{{ loop.index }}" name="connectivity" value="{{n.get('connectivity')}}"
+                                        {% if n.get('connectivity') in connectivitySelected %} checked {% endif %}>
+                                        <label for="connectivity-{{ loop.index }}">{{n.get('connectivity')}}</label>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <button class="shop-widget-btn" type="submit" value="connectivity">
+                                <i class="fas fa-search"></i>
+                                <span>Apply Connectivity</span>
+                            </button>
                         </div>
 
-                        
                         <div class="shop-widget">
                             <h6 class="shop-widget-title">Filter by Ear Placement</h6>
-                            <form>
-                                <ul class="shop-widget-list">
+                            <ul class="shop-widget-list">
 
-                        {% for e in earPlacement %}
-                            <li>
-                                <div class="shop-widget-content">
-                                    <input type="checkbox" id="tag4" name="check" onclick="onlyOne(this)">
-                                    <label for="tag1">{{e}}</label>
-                                </div>
+                                {% for e in earPlacement %}
+                                <li>
+                                    <div class="shop-widget-content">
+                                        <input type="checkbox" id="earPlacement{{ loop.index }}" name="earPlacement"
+                                            value="{{e.get('earplacement')}}"
+                                            {% if e.get('earplacement') in placementSelected %} checked {% endif %}>
+                                        <label for="earPlacement{{ loop.index }}">{{e.get('earplacement')}}</label>
+                                    </div>
 
-                            </li>
-                        {% endfor %}
+                                </li>
+                                {% endfor %}
 
-                         </ul>
-                                <button class="shop-widget-btn">
-                                    <i class="fas fa-search"></i>
-                                    <span>Search by Ear Placement</span>
-                                </button>
-                            </form>
+                            </ul>
+                            <button class="shop-widget-btn" type="submit" value="earPlacement">
+                                <i class="fas fa-search"></i>
+                                <span>Apply Ear Placement</span>
+                            </button>
                         </div>
 
-                        <div class="shop-widget">
-                            <button class="shop-widget-btn">
-                                    <i class="fas fa-search"></i>
-                                    <span>Search by All Filters</span>
-                                </button>
-                        </div>
-                    </div>
+                    </form>
+                </div>
 
 
                     <div class="col-lg-9">
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="top-filter">
-                                    <div class="shop-sorting">
-                                        <select id="sort-name" class="shop-widget-sort">
-                                            <option value="name-default">Sort - Name</option>
-                                            <option value="name-ascendent">Name (A-Z)</option>
-                                            <option value="name-ascendent">Name (Z-A)</option>
-                                        </select>
-                                        <span>&nbsp;&nbsp;&nbsp;</span>
-                                        <select id="sort-price" class="shop-widget-sort">
-                                            <option value="price-default">Sort - Price</option>
-                                            <option value="price-ascendent">Price (Low - High)</option>
-                                            <option value="price-ascendent">Price (High - Low)</option>
-                                        </select>
-                                    </div>
+                                <div class="top-filter"></div>
                             </div>
                         </div>
                         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4">
-
                             {% for product in products %}
                             <div class="col">
                                 <div class="product-card">
@@ -364,7 +380,7 @@
                                             <img src="static/images/product-images/{{product['image']}}" alt="product">
                                         </a>
                                         <div class="product-widget">
-                                            <a title="Product View" href="#" class="fas fa-eye" data-bs-toggle="modal" data-bs-target="#product-view-{{product['ID']}}"></a>
+                                            <a title="Product View" href="#" class="fas fa-eye" data-bs-toggle="modal" data-bs-target="#product-view-{{product['id']}}"></a>
                                         </div>
                                     </div>
                                     <div class="product-content">
@@ -381,7 +397,7 @@
                                         <div class="product-action">
                                             <form action="{{url_for('addcart')}}" method="post">
                                             <input style="width: 50%" class="action-input" title="Quantity Number" type="number" id="quantity" name="quantity" value="1">
-                                               <input type="hidden" id="p_id" name="p_id" value="{{product['ID']}}">
+                                               <input type="hidden" id="p_id" name="p_id" value="{{product['id']}}">
                                                <input type="hidden" id="name" name="name" value="{{product['name']}}">
                                                 <input type="hidden" id="price" name="price" value="{{product['price']}}">
                                                 <input type="hidden" id="cost" name="cost" value="{{product['cost']}}">
@@ -397,63 +413,61 @@
                                     </div>
                                 </div>
                             </div>
-        <div class="modal fade" id="product-view-{{product['ID']}}">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <button class="modal-close icofont-close" data-bs-dismiss="modal"></button>
-                    <div class="product-view">
-                        <div class="row">
-                            <div class="col-md-6 col-lg-6">
-                                <div class="view-gallery">
-                                    <div class="view-label-group">
-                                        <label class="view-label new">{{product['quantity']}} in stock</label>
-                                    </div>
-                                    <ul class="preview-slider">
-                                        <li><img src="static/images/product-images/{{product['image']}}" alt="product"></li>
-                                    </ul>
+                        <div class="modal fade" id="product-view-{{product['id']}}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <button class="modal-close icofont-close" data-bs-dismiss="modal"></button>
+                                    <div class="product-view">
+                                        <div class="row">
+                                            <div class="col-md-6 col-lg-6">
+                                                <div class="view-gallery">
+                                                    <div class="view-label-group">
+                                                        <label class="view-label new">{{product['quantity']}} in stock</label>
+                                                    </div>
+                                                    <ul class="preview-slider">
+                                                        <li><img src="static/images/product-images/{{product['image']}}" alt="product"></li>
+                                                    </ul>
 
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-6">
-                                <div class="view-details">
-                                    <h3 class="view-name">
-                                        <a href="product-video.html">{{product['name']}}</a>
-                                    </h3>
-                                    <div class="view-meta">
-                                        <p>Brand:<span>{{product['brand']}}</span></p><br>
-                                        <p>Connectivity: {{product['connectivity']}}</p><br>
-                                        <p>Model Type: {{product['model_type']}}</p>
-                                    </div>
-                                    <h3 class="view-price">
-                                        <span>${{product['price']}}</span>
-                                    </h3>
-                                    <p class="view-desc">{{product['description']}}</p>
-                                    <div class="view-add-group">
-                                        <button class="product-add" title="Add to Cart">
-                                            <span>Tap to add amount</span>
-                                        </button>
-                                        <div class="product-action">
-                                            <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
-                                            <input class="action-input" title="Quantity Number" type="text" name="quantity" value="1">
-                                            <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-lg-6">
+                                                <div class="view-details">
+                                                    <h3 class="view-name">
+                                                        <a href="product-video.html">{{product['name']}}</a>
+                                                    </h3>
+                                                    <div class="view-meta">
+                                                        <p>Brand:<span>{{product['brand']}}</span></p><br>
+                                                        <p>Connectivity: {{product['connectivity']}}</p><br>
+                                                        <p>Model Type: {{product['model_type']}}</p>
+                                                    </div>
+                                                    <h3 class="view-price">
+                                                        <span>${{product['price']}}</span>
+                                                    </h3>
+                                                    <p class="view-desc">{{product['description']}}</p>
+                                                    <div class="view-add-group">
+                                                        <button class="product-add" title="Add to Cart">
+                                                            <span>Tap to add amount</span>
+                                                        </button>
+                                                        <div class="product-action">
+                                                            <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
+                                                            <input class="action-input" title="Quantity Number" type="text" name="quantity" value="1">
+                                                            <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="view-action-group">
+                                                        <a class="view-wish wish" href="/shop" title="Add to Cart">
+                                                        <i class="fas fa-shopping-cart"></i>
+                                                            <span>add to cart</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="view-action-group">
-                                        <a class="view-wish wish" href="/shop" title="Add to Cart">
-                                           <i class="fas fa-shopping-cart"></i>
-                                            <span>add to cart</span>
-                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-                            {% endfor %}
-
-
+                        {% endfor %}
                     </div>
                 </div>
             </div>

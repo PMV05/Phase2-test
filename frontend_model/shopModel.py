@@ -50,31 +50,63 @@ from frontend_model.connectDB import *
 
 
 def getProductsModel():
+    productList = []
     db = Dbconnect()
-    query = "SELECT * FROM Product"
-    productList = db.select(query)
-    return productList
+    query = "SELECT * FROM Product WHERE status = 'active';"
+    results = db.select(query)
+    for res in results:
+        productList.append({"id": res['ID'], "name": res['name'], "brand": res['brand'], "model_type": res['model_type'],
+                    "color": res['color'], "price": res['price'], "cost": res['cost'], "connectivity": res['connectivity'], 
+                    "battery": res['battery'], "earplacement": res['earplacement'], "quantity": res['quantity'], 
+                    "description": res['description'], "image": res['image'], "status": res['status']})
+    return productList  
 
-
+# Filtro para las marcas de los audifonos
 def getBrandsModel():
     # Simulating grabbing these filters via SQL from the database
-    brands = ["Apple", "Beats", "Bose", "Corsair", "HyperX", "Logitech", "Razer", "Skullcandy", "Sony", "SteelSeries"]
+    db = Dbconnect()
+    query = ("SELECT DISTINCT brand "
+             "FROM Product "
+             "WHERE status = 'active'"
+             "ORDER BY brand;")
+    brands = db.select(query)
     return brands
 
+# Filtro para el color
 def getColorsModel():
-    colors = ["White", "Black"]
+    db = Dbconnect()
+    query = ("SELECT DISTINCT color "
+             "FROM Product "
+             "WHERE status = 'active'"
+             "ORDER BY color;")
+    colors = db.select(query)
     return colors
 
-
+# Filtro para el tipo de modelo
 def getTypeModel():
-    modelType = ["Headphone", "Earphone", "Headset"]
+    db = Dbconnect()
+    query = ("SELECT DISTINCT model_type "
+             "FROM Product "
+             "WHERE status = 'active'"
+             "ORDER BY model_type;")
+    modelType = db.select(query)
     return modelType
 
-
+# Filtro para el tipo de conectividad
 def getConnectivityModel():
-    connectivity = ['Wireless', 'Wired']
+    db = Dbconnect()
+    query = ("SELECT DISTINCT connectivity "
+             "FROM Product "
+             "WHERE status = 'active'"
+             "ORDER BY connectivity;")
+    connectivity = db.select(query)
     return connectivity
 
+# Filtro para el tipo de ajuste
 def getEarPlacementModel():
-    connectivity = ['Over-ear', 'On-ear', 'In-ear']
-    return connectivity
+    db = Dbconnect()
+    query = ("SELECT DISTINCT earplacement "
+             "FROM Product "
+             "WHERE status = 'active';")
+    earPlacement = db.select(query)
+    return earPlacement

@@ -6784,7 +6784,6 @@ tbody tr td:last-child {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  margin-bottom: 25px;
 }
 
 .filter-short {
