@@ -88,19 +88,21 @@
                     </ul>
                     {% endif %}
 
+                    
                     <form class="header-form">
                         <input type="text" placeholder="Search anything...">
                         <button><i class="fas fa-search"></i></button>
                     </form>
-
+                    
                     <div class="header-widget-group">
-
+                        {% if session['cart'] %}
+                    {% for key, item in session['cart'].items() %}
                         <button class="header-widget header-cart" title="Cartlist">
                             <i class="fas fa-shopping-basket"></i>
                             <sup>
-                            {{amount}}</sup>
+                                {{item['quantity']}}</sup>
 
-                            <span>total price<small>${{total}}0</small></span>
+                            <span>total price<small>${{item['total_price']}}</small></span>
                         </button>
                     </div>
                 </div>
@@ -114,23 +116,22 @@
         <!--=====================================
                   CART SIDEBAR PART START
         =======================================-->
+
         <aside class="cart-sidebar">
             <div class="cart-header">
                 <div class="cart-total">
                     <i class="fas fa-shopping-basket"></i>
-                    <span>total items (3)</span>
+                    <span>total items {{item['quantity']}}</span> 
                 </div>
                 <button class="cart-close"><i class="icofont-close"></i></button>
             </div>
             <ul class="cart-list">
-
-                {% if session['cart'] %}
-                    {% for key, item in session['cart'].items() %}
                 <li class="cart-item">
                     <div class="cart-media">
                         <a href="#"><img src="static/images/product-images/{{item['image']}}" alt="product"></a>
-                        <form action="{{url_for('delete', id=key)}}">
-                        <button class="cart-delete"><i class="far fa-trash-alt"></i></button>
+                        <form action="{{url_for('delete')}}" method="post">
+                            <input type="hidden" name="p_id" value="{{key}}">
+                            <button class="cart-delete" type="submit"><i class="far fa-trash-alt"></i></button>
                         </form>
                     </div>
                     <div class="cart-info-group">
@@ -151,16 +152,17 @@
                         </div>
                     </div>
                 </li>
-                    {% endfor %}
-                {% endif %}
+
             </ul>
             <div class="cart-footer">
                 <a class="cart-checkout-btn" href="{{url_for('checkout')}}">
                     <span class="checkout-label">Proceed to Checkout</span>
-                    <span class="checkout-price">${{total}}0</span>
+                    <span class="checkout-price">${{item['total_price']}}0</span>
                 </a>
             </div>
         </aside>
+        {% endfor %}
+        {% endif %}
 
         <!--=====================================
                     CART SIDEBAR PART END

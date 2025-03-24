@@ -8,14 +8,6 @@ def MagerDicts(dict1, dict2):
         return dict(list(dict1.items()) + list(dict2.items()))
     return False
 
-
-# Cart items simulated
-dictitems1 = {'1': {'name': "Airpods 4", 'price': 129.00, 'quantity': 2, 'total_price': 258.00,
-                  'stock': 25, 'brand': "Apple", 'wifi': "Yes", 'videores': "Earphones", 'desc': "",
-                  'image': "imagenes_audifonos/apple/apple_airpods_4.jpg", 'cost': 129.00}}
-dictitems2 = {'3': {'name': "Airpods Pro 2", 'price': 249.00, 'quantity': 1, 'total_price': 249.00,
-                  'stock': 15, 'brand': "Apple", 'wifi': "Yes", 'videores': "Earphones", 'desc': "",
-                  'image': "imagenes_audifonos/apple/apple_airpods_pro2.jpg", 'cost': 249.00}}
 # TODO:
 def getCartModel():
     # Initialize the amount and total for the cart
@@ -58,9 +50,23 @@ def addCartModel(dictitems):
     return
 
 
-def deleteCartItemModel():
-    # TODO: FOR STUDENT TO ADD
-    return
+def deleteCartItemModel(p_id):
+    if 'cart' not in session or session['cart'] == []: 
+        return False
+    
+    if p_id in session['cart']:
+        del session['cart'][p_id]
+
+    session['amount'] = 0
+    session['total'] = 0
+
+    for key, item in session['cart'].items():
+        session['amount'] += int(item['quantity'])
+        session['total'] += float(item['total_price'])
+
+        return True
+
+    return False
 
 
 
