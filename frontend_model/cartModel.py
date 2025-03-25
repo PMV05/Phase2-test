@@ -14,7 +14,7 @@ def getCartModel():
     if 'cart' in session:
         return session['cart']
     else:
-        session['cart'] = []
+        session['cart'] = {}
         return session['cart']
 
 # TODO: 

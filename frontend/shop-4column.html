@@ -84,7 +84,7 @@
                     </ul>
                     {% else %}
                     <ul class="dropdown">
-                    <a class="navbar-link " href="{{url_for('enterpage')}}">Login</a>
+                    <a class="navbar-link " href="{{url_for('enterpage', message='enter')}}">Login</a>
                     </ul>
                     {% endif %}
 
@@ -111,7 +111,7 @@
                             <sup>
                             {{amount}}</sup>
 
-                            <span>total price<small>${{total}}0</small></span>
+                            <span>total price<small>${{ '%.2f'|format(total) }}</small></span>
                         </button>
                     </div>
                 </div>
@@ -148,7 +148,7 @@
                     <div class="cart-info-group">
                         <div class="cart-info">
                             <h6><a href="product-single.html">{{item['name']}}</a></h6>
-                            <p>Unit Price - ${{item['price']}}0</p>
+                            <p>Unit Price - ${{item['price']}}</p>
                         </div>
                         <div class="cart-action-group">
                             <div class="product-action">
@@ -159,7 +159,7 @@
                              <form action="{{url_for('editcart')}}" method="post">
                                     <button class="action">Edit</button>
                              </form>
-                            <h6>${{item['total_price']}}0</h6>
+                            <h6>${{ '%.2f'|format(item['total_price']) }}</h6>
                         </div>
                     </div>
                 </li>
@@ -169,7 +169,7 @@
             <div class="cart-footer">
                 <a class="cart-checkout-btn" href="{{url_for('checkout')}}">
                     <span class="checkout-label">Proceed to Checkout</span>
-                    <span class="checkout-price">${{total}}</span>
+                    <span class="checkout-price">${{ '%.2f'|format(total) }}</span>
                 </a>
             </div>
         </aside>
