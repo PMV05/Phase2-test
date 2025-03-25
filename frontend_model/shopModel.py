@@ -110,3 +110,29 @@ def getEarPlacementModel():
              "WHERE status = 'active';")
     earPlacement = db.select(query)
     return earPlacement
+
+def searchProductsModel(searchQuery):
+    db = Dbconnect()
+    query = "SELECT * FROM Product WHERE status = 'active' AND name LIKE %s"
+    params = [f"%{searchQuery}%"]
+    results = db.select(query, params)
+
+    productList = []
+    for res in results:
+        productList.append({
+            "id": res['ID'],
+            "name": res['name'],
+            "brand": res['brand'],
+            "model_type": res['model_type'],
+            "color": res['color'],
+            "price": res['price'],
+            "cost": res['cost'],
+            "connectivity": res['connectivity'],
+            "battery": res['battery'],
+            "earplacement": res['earplacement'],
+            "quantity": res['quantity'],
+            "description": res['description'],
+            "image": res['image'],
+            "status": res['status']
+        })
+    return productList

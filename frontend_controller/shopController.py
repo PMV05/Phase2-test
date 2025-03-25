@@ -20,3 +20,7 @@ def getEarPlacement():
 # TODO:
 def getConnectivity():
     return getConnectivityModel()
+
+# Search function connected to Model
+def searchProducts(searchQuery):
+    return searchProductsModel(searchQuery)
