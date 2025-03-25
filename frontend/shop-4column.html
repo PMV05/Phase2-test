@@ -56,7 +56,7 @@
 
 
     
-        <!--=====================================
+               <!--=====================================
                     HEADER PART START
         =======================================-->
 
@@ -84,25 +84,23 @@
                     </ul>
                     {% else %}
                     <ul class="dropdown">
-                    <a class="navbar-link" href="/enter">Login</a>
+                    <a class="navbar-link " href="{{url_for('enterpage')}}">Login</a>
                     </ul>
                     {% endif %}
 
-                    
                     <form class="header-form">
                         <input type="text" placeholder="Search anything...">
                         <button><i class="fas fa-search"></i></button>
                     </form>
-                    
+
                     <div class="header-widget-group">
-                        {% if session['cart'] %}
-                    {% for key, item in session['cart'].items() %}
+
                         <button class="header-widget header-cart" title="Cartlist">
                             <i class="fas fa-shopping-basket"></i>
                             <sup>
-                                {{item['quantity']}}</sup>
+                            {{amount}}</sup>
 
-                            <span>total price<small>${{item['total_price']}}</small></span>
+                            <span>total price<small>${{total}}0</small></span>
                         </button>
                     </div>
                 </div>
@@ -116,16 +114,18 @@
         <!--=====================================
                   CART SIDEBAR PART START
         =======================================-->
-
         <aside class="cart-sidebar">
             <div class="cart-header">
                 <div class="cart-total">
                     <i class="fas fa-shopping-basket"></i>
-                    <span>total items {{item['quantity']}}</span> 
+                    <span>total items ({{amount}})</span>
                 </div>
                 <button class="cart-close"><i class="icofont-close"></i></button>
             </div>
             <ul class="cart-list">
+
+                {% if session['cart'] %}
+                    {% for key, item in session['cart'].items() | sort %}
                 <li class="cart-item">
                     <div class="cart-media">
                         <a href="#"><img src="static/images/product-images/{{item['image']}}" alt="product"></a>
@@ -152,17 +152,16 @@
                         </div>
                     </div>
                 </li>
-
+                    {% endfor %}
+                {% endif %}
             </ul>
             <div class="cart-footer">
                 <a class="cart-checkout-btn" href="{{url_for('checkout')}}">
                     <span class="checkout-label">Proceed to Checkout</span>
-                    <span class="checkout-price">${{item['total_price']}}0</span>
+                    <span class="checkout-price">${{total}}</span>
                 </a>
             </div>
         </aside>
-        {% endfor %}
-        {% endif %}
 
         <!--=====================================
                     CART SIDEBAR PART END

@@ -170,7 +170,9 @@ def shop():
     products = db.select(query, params)
 
     # Then we create the shopping cart by accessing getCart in shopController
-    getCart()
+    # getCart()
+
+    cart = getCart()
 
     # Find the different filter options for the products by accessing the functions from shopController
     # TODO: FILTERS TO BE CONNECTED TO MYSQL BY STUDENTS
@@ -181,14 +183,19 @@ def shop():
     earPlacement = getEarPlacement()
 
     # Set the amount of items user currently has in cart
-    amount = 3
+    amount = 0
     # And set the amount for the entire site to access
-    session['amount'] = 3 #TODO: Cambiar!!
+    for item in cart.values():
+        amount += int(item.get('quantity', 0))
+    
+    session['amount'] = amount
 
     # Set the cart's total amount for the page
-    total = 507.00 #TODO: Cambio del total
+    total = 0
+    for item in cart.values():
+        total += float(item['quantity']) * float(item['price']) 
     # And set the total for the entire site to access
-    session['total'] = 507.00 #TODO: Cambio del total
+    session['total'] = total #TODO: Cambio del total
 
     # Redirect to shop page with the variables used
     return render_template("shop-4column.html", products=products, amount=amount, total=total, brands=brands,
