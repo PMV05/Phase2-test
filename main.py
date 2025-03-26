@@ -70,7 +70,6 @@ def login():
     # Enters here when logging in
     email = request.form.get('email')
     passcode = request.form.get('password')
-    session['amount'] = 0
     # Receive your login information and send to the loginController's logincontroller()
     return logincontroller(email=email, password=passcode)
 
