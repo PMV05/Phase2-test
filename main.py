@@ -259,21 +259,44 @@ def editinfo():
     return redirect(request.referrer)
 
 
-@app.route("/password", methods=["POST"])
+@app.route("/password", methods=["GET", "POST"])
 def password():
-    # make password changes
-    # TODO: TO BE CONNECTED TO MYSQL BY STUDENTS
+    # Si es POST, procesar el cambio (puedes agregarlo después)
+    # Si es GET, solo mostrar el formulario
     return render_template("change-password.html")
 
+@app.route("/reset-password")
+def resetpasswordpage():
+    return render_template("reset-password.html")
+
+
 # TODO:
-@app.route("/changepass")
-def changepass():
-    # This route is optional for hashing an existing password in the db
-    # To use, write the route /changepass/?email=javier.quinones3@upr.edu
-    # Changing the email to whichever user you want to have password hashed
-    email = request.args.get('email')
-    changePass(email)
-    return redirect(request.referrer)
+from passlib.hash import sha256_crypt
+
+@app.route("/resetpassword", methods=["POST"])
+def resetpassword():
+    email = request.form.get('email')
+    newpass1 = request.form.get('newpass1')
+    newpass2 = request.form.get('newpass2')
+
+    if newpass1 != newpass2:
+        return render_template('reset-password.html', message="Passwords do not match.")
+
+    db = Dbconnect()
+    
+    # Verificar si el email existe
+    result = db.select("SELECT * FROM Customer WHERE email = %s", (email,))
+    if not result:
+        return render_template('reset-password.html', message="Email not found.")
+
+    # Hashear nueva contraseña
+    hashed_pass = sha256_crypt.encrypt(newpass1)
+
+    # Actualizar en la base de datos
+    db.execute("UPDATE Customer SET password = %s WHERE email = %s", (hashed_pass, email))
+
+    return redirect("/enter")
+
 
 @app.route("/orders")
 def orders():
