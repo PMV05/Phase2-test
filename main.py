@@ -337,10 +337,41 @@ def delete():
     return redirect(request.referrer)
 
 
+# TODO: TO BE ADDED BY STUDENTS (Editing the session variable cart)
 @app.route("/editcart", methods=["POST"])
 def editcart():
-    # TODO: TO BE ADDED BY STUDENTS (Editing the session variable cart)
-    # edit cart here. not in function
+
+    p_id = request.form.get('p_id')
+    new_quantity = int(request.form.get('quantity', 1))
+    
+    # Ensure cart exists in session
+    if 'cart' not in session or session['cart'] is None:
+        return redirect(request.referrer)
+    
+    # Check if the product exists in the cart
+    if p_id in session['cart']:
+        item = session['cart'][p_id] #Fin the product that is in the cart
+        
+        # Makes sure that the new quantity doesn't exceed stock
+        if new_quantity <= int(item['stock']):
+            item['quantity'] = new_quantity
+            item['total_price'] = float(new_quantity) * float(item['price'])
+
+        else:
+            # If the quantity the user entered exceeds the stock, set to max stock
+            item['quantity'] = int(item['stock'])
+            item['total_price'] = float(item['stock']) * float(item['price'])
+        
+        session['amount'] = 0
+        session['total'] = 0
+
+        for key, cart_item in session['cart'].items():
+            session['amount'] += int(cart_item['quantity'])
+            session['total'] += float(cart_item['total_price'])
+        
+        # Makes sure that the changes are save
+        session.modified = True
+    
     return redirect(request.referrer)
 
 # TODO: VERIFICAR EL CODIGO DE LA PROFE

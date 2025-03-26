@@ -140,14 +140,15 @@
                             <p>Unit Price - ${{item['price']}}</p>
                         </div>
                         <div class="cart-action-group">
-                            <div class="product-action">
-                                <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
-                                <input class="action-input" title="Quantity Number" type="text" name="quantity" value="{{item['quantity']}}">
-                                <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
-                            </div>
-                             <form action="{{url_for('editcart')}}" method="post">
-                                    <button class="action">Edit</button>
-                             </form>
+                            <form action="{{ url_for('editcart') }}" method="post">
+                                <input type="hidden" name="p_id" value="{{key}}">
+                                <div class="product-action">
+                                    <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
+                                    <input class="action-input" title="Quantity Number" type="text" name="quantity" value="{{ item['quantity'] }}">
+                                    <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
+                                    <button class="action"> Edit</button>
+                                </div>
+                            </form> 
                             <h6>${{ '%.2f'|format(item['total_price']) }}</h6>
                         </div>
                     </div>
@@ -393,7 +394,7 @@
                                         </h6>
                                         <button class="product-add" title="Add to Cart">
                                             <i class="fas fa-shopping-basket"></i>
-                                            <span>add</span>
+                                            <span>Add</span>
                                         </button>
                                         <div class="product-action">
                                             <form action="{{url_for('addcart')}}" method="post">
@@ -447,19 +448,25 @@
                                                         <p class="view-desc">{{product['description']}}</p>
                                                         <div class="view-add-group">
                                                             <button class="product-add" title="Add to Cart">
-                                                                <span>Tap to add amount</span>
+                                                                <i class="fas fa-shopping-basket"></i>
+                                                                <span>Add to cart</span>
                                                             </button>
                                                             <div class="product-action">
-                                                                <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
-                                                                <input class="action-input" title="Quantity Number" type="text" name="quantity" value="1"  max="{{product['quantity']}}">
-                                                                <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="view-action-group">
-                                                            <a class="view-wish wish" href="/shop" title="Add to Cart">
-                                                            <i class="fas fa-shopping-cart"></i>
-                                                                <span>add to cart</span>
-                                                            </a>
+                                                                <form action="{{url_for('addcart')}}" method="post" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+                                                                    <input class="action-input" title="Quantity Number" type="number" id="quantity" name="quantity" value="1" min="1" max="{{product['quantity']}}">
+                                                                    <input type="hidden" id="p_id" name="p_id" value="{{product['ID']}}">
+                                                                    <input type="hidden" id="name" name="name" value="{{product['name']}}">
+                                                                    <input type="hidden" id="price" name="price" value="{{product['price']}}">
+                                                                    <input type="hidden" id="cost" name="cost" value="{{product['cost']}}">
+                                                                    <input type="hidden" id="stock" name="stock" value="{{product['quantity']}}">
+                                                                    <input type="hidden" id="brand" name="brand" value="{{product['brand']}}">
+                                                                    <input type="hidden" id="connectivity" name="connectivity" value="{{product['connetivity']}}">
+                                                                    <input type="hidden" id="earplacement" name="earplacement" value="{{product['earplacement']}}">
+                                                                    <input type="hidden" id="desc" name="desc" value="{{product['description']}}">
+                                                                    <input type="hidden" id="image" name="image" value="{{product['image']}}">                                                                
+                                                                    <input class="action-input" type="submit" value="Add">
+                                                                </form>
+                                                            </div> 
                                                         </div>
                                                     </div>
                                                 </div>
