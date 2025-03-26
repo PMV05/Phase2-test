@@ -50,16 +50,11 @@ from frontend_model.connectDB import *
 
 
 def getProductsModel():
-    productList = []
     db = Dbconnect()
-    query = "SELECT * FROM Product WHERE status = 'active';"
-    results = db.select(query)
-    for res in results:
-        productList.append({"id": res['ID'], "name": res['name'], "brand": res['brand'], "model_type": res['model_type'],
-                    "color": res['color'], "price": res['price'], "cost": res['cost'], "connectivity": res['connectivity'], 
-                    "battery": res['battery'], "earplacement": res['earplacement'], "quantity": res['quantity'], 
-                    "description": res['description'], "image": res['image'], "status": res['status']})
-    return productList  
+    query = "SELECT * FROM Product  WHERE status = 'active';"
+    productList = db.select(query)
+    return productList 
+
 
 # Filtro para las marcas de los audifonos
 def getBrandsModel():
