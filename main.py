@@ -1,5 +1,6 @@
 from functools import wraps # TODO:
 
+
 from datetime import datetime
 # TODO:
 import pymysql
@@ -14,7 +15,7 @@ from frontend_controller.shopController import *
 
 app = Flask(__name__, template_folder='frontend/')
 app.secret_key = 'akeythatissecret'
-     
+
 # In this template, you will usually find functions with comments tying them to a specific controller
 # main.py accesses the frontend folders
 # Every controller accesses its relevant model and will send the information back to this Flask app
@@ -373,34 +374,37 @@ def editcart():
     
     return redirect(request.referrer)
 
-# TODO: VERIFICAR EL CODIGO DE LA PROFE
 @app.route("/checkout")
 def checkout():
-    # Check if customer is logged in
     if 'customer' in session:
-        # > cartController
         user = getUserCheckout()
+        
+        # Imprimir para depurar el valor de user
+        print(user)  # Añadir esta línea para verificar la estructura de user
+        
         total = 0
+        
+        # Asegurarse de que user tiene al menos 11 elementos (índice 10)
+        if len(user) > 10:
+            # Formatear el número de teléfono si el índice 10 existe
+            num = '{:03d}-{:03d}-{:04d}'.format(
+                int(str(user[10])[:3]),
+                int(str(user[10])[3:6]),
+                int(str(user[10])[6:])
+            )
+        else:
+            num = "Número no disponible"
 
-        # Formatted phone number for display
-        num = '{:03d}-{:03d}-{:04d}'.format(
-            int(str(user[10])[:3]),
-            int(str(user[10])[3:6]),
-            int(str(user[10])[6:])
-        )
-
-        # calculate total from the session cart
-        # Reminder: session['cart'] was created in app.route(/shop)
-        # The cart itself is found in cartModel
+        # Calcular el total del carrito
         for key, item in session['cart'].items():
             total += item['total_price']
+        
         return render_template("checkout.html", user1=user, num=num, total=total)
 
     else:
-        # If customer isn't logged in, create session variable to tell us we're headed to checkout
-        # Redirect us to login with message
         session['checkout'] = True
         return redirect("/wrong")
+
 
 
 @app.route("/invoice")
