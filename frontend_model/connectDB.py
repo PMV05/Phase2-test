@@ -1,7 +1,7 @@
 import pymysql
 import pymysql.cursors
 
-#Prueba2
+
 # Use this to access database
 class Dbconnect:
     def __init__(self) -> None:
