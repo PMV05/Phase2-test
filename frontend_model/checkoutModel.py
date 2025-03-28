@@ -3,6 +3,7 @@ import pymysql
 from flask import session
 from frontend_model.connectDB import *
 
+
 # # Simulated tuple from customer database
 # # By order: customer ID, first name, last name, address line 1, address line 2, city, state, zip code, email
 # # password, phone number, payment card name, payment card type, payment card number, payment card expiration date, customer status
@@ -29,3 +30,9 @@ def validateUserModel():
                      "status": users['c_status']})
 
     return user
+
+def getUserCheckout():
+    # Simulación de obtención de datos del usuario para el checkout
+    return {
+        "phone_number": "1234567890"  # Simula un número de teléfono
+    }
