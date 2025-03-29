@@ -121,12 +121,12 @@ def shop():
 
     db = Dbconnect()
     params = []
-    query = "SELECT * FROM Product WHERE status = 'active' "
+    query = "SELECT * FROM product WHERE p_status = 'active' "
 
     # Filtro para la búsqueda por nombre
     searchQuery = request.args.get('search')
     if searchQuery:
-        query += " AND (LOWER(name) LIKE %s OR LOWER(brand) LIKE %s) "
+        query += " AND (LOWER(p_name) LIKE %s OR LOWER(p_brand) LIKE %s) "
         params.append(f"%{searchQuery.lower()}%")
         params.append(f"%{searchQuery.lower()}%")
 
@@ -134,35 +134,35 @@ def shop():
     brandsSelected = request.args.getlist('brands')
     if(brandsSelected):
         numberBrands = ', '.join(['%s'] * len(brandsSelected)) 
-        query += f"and brand IN ({numberBrands})"
+        query += f"and p_brand IN ({numberBrands})"
         params.extend(brandsSelected)
 
     # Filtro para el color
     colorsSelected = request.args.getlist('color-types')
     if(request.args.getlist('color-types')):
         numberColors = ', '.join(['%s'] * len(colorsSelected)) 
-        query += f"and color IN ({numberColors}) "
+        query += f"and p_color IN ({numberColors}) "
         params.extend(colorsSelected)
 
     # Filtro para el tipo de modelo
     modelsSelected = request.args.getlist('modelType')
     if(request.args.getlist('modelType')):
         numberModels = ', '.join(['%s'] * len(modelsSelected)) 
-        query += f"and model_type IN ({numberModels}) "
+        query += f"and p_model_type IN ({numberModels}) "
         params.extend(modelsSelected)
 
     # Filtro para la conecetividad
     connectivitySelected = request.args.getlist('connectivity')
     if(request.args.getlist('connectivity')):
         numberConnectivity = ', '.join(['%s'] * len(connectivitySelected)) 
-        query += f"and connectivity IN ({numberConnectivity})"
+        query += f"and p_connectivity IN ({numberConnectivity})"
         params.extend(connectivitySelected)
 
     # Filtro para el ajuste de oreja
     placementSelected = request.args.getlist('earPlacement')
     if(request.args.getlist('earPlacement')):
         numberPlacement = ', '.join(['%s'] * len(placementSelected)) 
-        query += f"and earplacement IN ({numberPlacement}) "
+        query += f"and p_earplacement IN ({numberPlacement}) "
         params.extend(placementSelected)
 
     # Filtro para el orden ascendente
@@ -170,7 +170,7 @@ def shop():
     orderSelected = request.args.get('sort-order')
 
     if(sortingSelected and orderSelected):
-        query += f" Order By {', '.join(sortingSelected)} "
+        query += f" order By {', '.join(sortingSelected)} "
         if(orderSelected == 'descending'):   
             query += " DESC"
 
@@ -213,11 +213,11 @@ def addinfo():
     postType = request.form.get('postType')
 
     if postType == 'addaddress':
-        aline1 = request.form.get('aline1')
+        street = request.form.get('street')
         state = request.form.get('state')
-        zipcode = request.form.get('zipcode')
+        postal_code = request.form.get('postal_code')
         city = request.form.get('city')
-        addaddresscontroller(aline1, state, zipcode, city)
+        addaddresscontroller(street, state, postal_code, city)
 
     elif postType == 'addpayment':
         print("STUDENTS MUST ADD THE ADD PAYMENT METHOD FUNCTION")
@@ -232,12 +232,12 @@ def editinfo():
 
     # If editing address info, edit address -> profileController
     if postType == 'editaddress':
-        aline1 = request.form.get('aline1')
+        street = request.form.get('street')
         state = request.form.get('state')
-        zipcode = request.form.get('zipcode')
+        postal_code = request.form.get('postal_code')
         city = request.form.get('city')
-        a_id = request.form.get('a_id')
-        editaddresscontroller(aline1, state, zipcode, city, a_id)
+        address_id = request.form.get('address_id')
+        editaddresscontroller(street, state, postal_code, city, address_id)
 
     # If editing payment info -> profileController
     elif postType == 'editpayment':
@@ -262,7 +262,7 @@ def editinfo():
 @app.route("/password", methods=["GET", "POST"])
 def password():
     # Si es POST, procesar el cambio (puedes agregarlo después)
-    # Si es GET, solo mostrar el formulario
+    # Si es GET, solo mostrar el formulario TODO: VERIFICAR!!!
     return render_template("change-password.html")
 
 @app.route("/reset-password")
@@ -285,7 +285,7 @@ def resetpassword():
     db = Dbconnect()
     
     # Verificar si el email existe
-    result = db.select("SELECT * FROM Customer WHERE email = %s", (email,))
+    result = db.select("SELECT * FROM customer WHERE c_email = %s", (email,))
     if not result:
         return render_template('reset-password.html', message="Email not found.")
 
@@ -293,7 +293,7 @@ def resetpassword():
     hashed_pass = sha256_crypt.encrypt(newpass1)
 
     # Actualizar en la base de datos
-    db.execute("UPDATE Customer SET password = %s WHERE email = %s", (hashed_pass, email))
+    db.execute("UPDATE customer SET c_password = %s WHERE c_email = %s", (hashed_pass, email))
 
     return redirect("/enter")
 
@@ -379,12 +379,12 @@ def checkout():
     if 'customer' in session:
         user = getUserCheckout()
         
-        # Imprimir para depurar el valor de user
-        print(user)  # Añadir esta línea para verificar la estructura de user
+        # Imprimir para depurar el valor de user TODO: VERIFICAR!!!
+        print(user)  # Añadir esta línea para verificar la estructura de user  TODO: VERIFICAR!!!
         
         total = 0
         
-        # Asegurarse de que user tiene al menos 11 elementos (índice 10)
+        # Asegurarse de que user tiene al menos 11 elementos (índice 10) 
         if len(user) > 10:
             # Formatear el número de teléfono si el índice 10 existe
             num = '{:03d}-{:03d}-{:04d}'.format(
@@ -418,11 +418,11 @@ def invoice():
     return render_template("invoice.html", order=order, products=products, amount=amount)
 
 
-@app.route("/filter")
-def filter():
-    # filter happens here
-    # not in function currently
-    return redirect("/shop")
+# @app.route("/filter")
+# def filter():
+#     # filter happens here
+#     # not in function currently
+#     return redirect("/shop")
 
 
 # Press the green button in the gutter to run the script.

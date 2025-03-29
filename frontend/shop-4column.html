@@ -214,16 +214,16 @@
                                     <li>
                                         <div class="shop-widget-content">
                                             <input type="checkbox" id="sorting-name" name="sortings"
-                                                value="name"
-                                                {% if "name" in sortingSelected %} checked {% endif %}>
+                                                value="p_name"
+                                                {% if "p_name" in sortingSelected %} checked {% endif %}>
                                             <label for="sorting-name">Name</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="shop-widget-content">
                                             <input type="checkbox" id="sorting-price" name="sortings"
-                                                value="price"
-                                                {% if "price" in sortingSelected %} checked {% endif %}>
+                                                value="p_price"
+                                                {% if "p_price" in sortingSelected %} checked {% endif %}>
                                             <label for="sorting-price">Price</label>
                                         </div>
                                     </li>
@@ -236,7 +236,7 @@
                                                 <input type="radio" id="order-asc" name="sort-order"
                                                     value="Ascending"
                                                     {% if 'Ascending' == orderSelected %} checked {% endif %}>
-                                                <label for="order-asc">Ascending Price</label>
+                                                <label for="order-asc">Ascending</label>
                                             </div>
 
                                         </li>
@@ -245,7 +245,7 @@
                                                 <input type="radio" id="order-desc" name="sort-order"
                                                     value="descending"
                                                     {% if 'descending' ==  orderSelected %} checked {% endif %}>
-                                                <label for="order-desc">Descending Price</label>
+                                                <label for="order-desc">Descending</label>
                                             </div>
 
                                         </li>
@@ -264,9 +264,9 @@
                                     <li>
                                         <div class="shop-widget-content">
                                             <input type="checkbox" id="brand-{{ loop.index }}" name="brands"
-                                                value="{{b.get('brand')}}"
-                                                {% if b.get('brand') in brandsSelected %} checked {% endif %}>
-                                            <label for="brand-{{ loop.index }}">{{b.get('brand')}}</label>
+                                                value="{{b.get('p_brand')}}"
+                                                {% if b.get('p_brand') in brandsSelected %} checked {% endif %}>
+                                            <label for="brand-{{ loop.index }}">{{b.get('p_brand')}}</label>
                                         </div>
 
                                     </li>
@@ -286,9 +286,9 @@
                                     <li>
                                         <div class="shop-widget-content">
                                             <input type="checkbox" id="color-{{ loop.index }}" name="color-types"
-                                                value="{{c.get('color')}}"
-                                                {% if c.get('color') in colorsSelected %} checked {% endif %}>
-                                            <label for="color-{{ loop.index }}">{{c.get('color')}}</label>
+                                                value="{{c.get('p_color')}}"
+                                                {% if c.get('p_color') in colorsSelected %} checked {% endif %}>
+                                            <label for="color-{{ loop.index }}">{{c.get('p_color')}}</label>
                                         </div>
                                     </li>
                                     {% endfor %}
@@ -307,9 +307,9 @@
                                     <li>
                                         <div class="shop-widget-content">
                                             <input type="checkbox" id="modelType{{ loop.index }}" name="modelType"
-                                                value="{{m.get('model_type')}}"
-                                                {% if m.get('model_type') in modelsSelected %} checked {% endif %}>
-                                            <label for="modelType{{ loop.index }}">{{m.get('model_type')}}</label>
+                                                value="{{m.get('p_model_type')}}"
+                                                {% if m.get('p_model_type') in modelsSelected %} checked {% endif %}>
+                                            <label for="modelType{{ loop.index }}">{{m.get('p_model_type')}}</label>
                                         </div>
                                     </li>
                                     {% endfor %}
@@ -326,9 +326,9 @@
                                     {% for n in connectivity %}
                                     <li>
                                         <div class="shop-widget-content">
-                                            <input type="checkbox" id="connectivity{{ loop.index }}" name="connectivity" value="{{n.get('connectivity')}}"
-                                            {% if n.get('connectivity') in connectivitySelected %} checked {% endif %}>
-                                            <label for="connectivity-{{ loop.index }}">{{n.get('connectivity')}}</label>
+                                            <input type="checkbox" id="connectivity{{ loop.index }}" name="connectivity" value="{{n.get('p_connectivity')}}"
+                                            {% if n.get('p_connectivity') in connectivitySelected %} checked {% endif %}>
+                                            <label for="connectivity-{{ loop.index }}">{{n.get('p_connectivity')}}</label>
                                         </div>
                                     </li>
                                     {% endfor %}
@@ -347,9 +347,9 @@
                                     <li>
                                         <div class="shop-widget-content">
                                             <input type="checkbox" id="earPlacement{{ loop.index }}" name="earPlacement"
-                                                value="{{e.get('earplacement')}}"
-                                                {% if e.get('earplacement') in placementSelected %} checked {% endif %}>
-                                            <label for="earPlacement{{ loop.index }}">{{e.get('earplacement')}}</label>
+                                                value="{{e.get('p_earplacement')}}"
+                                                {% if e.get('p_earplacement') in placementSelected %} checked {% endif %}>
+                                            <label for="earPlacement{{ loop.index }}">{{e.get('p_earplacement')}}</label>
                                         </div>
 
                                     </li>
@@ -378,19 +378,19 @@
                                 <div class="product-card">
                                     <div class="product-media">
 
-                                        <a class="product-image" href="static/images/product-images/{{product['image']}}">
-                                            <img src="static/images/product-images/{{product['image']}}" alt="product">
+                                        <a class="product-image" href="static/images/product-images/{{product['p_image']}}">
+                                            <img src="static/images/product-images/{{product['p_image']}}" alt="product">
                                         </a>
                                         <div class="product-widget">
-                                            <a title="Product View" href="#" class="fas fa-eye" data-bs-toggle="modal" data-bs-target="#product-view-{{product['ID']}}"></a>
+                                            <a title="Product View" href="#" class="fas fa-eye" data-bs-toggle="modal" data-bs-target="#product-view-{{product['product_ID']}}"></a>
                                         </div>
                                     </div>
                                     <div class="product-content">
                                         <h6 class="product-name">
-                                            <a href="product-video.html">{{product['name']}}</a>
+                                            <a href="product-video.html">{{product['p_name']}}</a>
                                         </h6>
                                         <h6 class="product-price">
-                                            <span>${{product['price']}}</span>
+                                            <span>${{product['p_price']}}</span>
                                         </h6>
                                         <button class="product-add" title="Add to Cart">
                                             <i class="fas fa-shopping-basket"></i>
@@ -399,23 +399,23 @@
                                         <div class="product-action">
                                             <form action="{{url_for('addcart')}}" method="post">
                                             <input style="width: 50%" class="action-input" title="Quantity Number" type="number" id="quantity" name="quantity" value="1" max="{{product['quantity']}}">
-                                               <input type="hidden" id="p_id" name="p_id" value="{{product['ID']}}">
-                                               <input type="hidden" id="name" name="name" value="{{product['name']}}">
-                                                <input type="hidden" id="price" name="price" value="{{product['price']}}">
-                                                <input type="hidden" id="cost" name="cost" value="{{product['cost']}}">
-                                                <input type="hidden" id="stock" name="stock" value="{{product['quantity']}}">
-                                                <input type="hidden" id="brand" name="brand" value="{{product['brand']}}">
-                                                <input type="hidden" id="connectivity" name="connectivity" value="{{product['connetivity']}}">
-                                                <input type="hidden" id="earplacement" name="earplacement" value="{{product['earplacement']}}">
-                                                <input type="hidden" id="desc" name="desc" value="{{product['description']}}">
-                                                <input type="hidden" id="image" name="image" value="{{product['image']}}">
+                                               <input type="hidden" id="p_id" name="p_id" value="{{product['product_ID']}}">
+                                               <input type="hidden" id="name" name="name" value="{{product['p_name']}}">
+                                                <input type="hidden" id="price" name="price" value="{{product['p_price']}}">
+                                                <input type="hidden" id="cost" name="cost" value="{{product['p_cost']}}">
+                                                <input type="hidden" id="stock" name="stock" value="{{product['p_quantity']}}">
+                                                <input type="hidden" id="brand" name="brand" value="{{product['p_brand']}}">
+                                                <input type="hidden" id="connectivity" name="connectivity" value="{{product['p_connetivity']}}">
+                                                <input type="hidden" id="earplacement" name="earplacement" value="{{product['p_earplacement']}}">
+                                                <input type="hidden" id="desc" name="desc" value="{{product['p_description']}}">
+                                                <input type="hidden" id="image" name="image" value="{{product['p_image']}}">
                                               <input style="width: 30%" type="submit" value="Add">
                                               </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal fade" id="product-view-{{product['ID']}}">
+                            <div class="modal fade" id="product-view-{{product['product_ID']}}">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <button class="modal-close icofont-close" data-bs-dismiss="modal"></button>
@@ -424,10 +424,10 @@
                                                 <div class="col-md-6 col-lg-6">
                                                     <div class="view-gallery">
                                                         <div class="view-label-group">
-                                                            <label class="view-label new">{{product['quantity']}} in stock</label>
+                                                            <label class="view-label new">{{product['p_quantity']}} in stock</label>
                                                         </div>
                                                         <ul class="preview-slider">
-                                                            <li><img src="static/images/product-images/{{product['image']}}" alt="product"></li>
+                                                            <li><img src="static/images/product-images/{{product['p_image']}}" alt="product"></li>
                                                         </ul>
 
                                                     </div>
@@ -435,17 +435,17 @@
                                                 <div class="col-md-6 col-lg-6">
                                                     <div class="view-details">
                                                         <h3 class="view-name">
-                                                            <a href="product-video.html">{{product['name']}}</a>
+                                                            <a href="product-video.html">{{product['p_name']}}</a>
                                                         </h3>
                                                         <div class="view-meta">
-                                                            <p>Brand:<span>{{product['brand']}}</span></p><br>
-                                                            <p>Connectivity: {{product['connectivity']}}</p><br>
-                                                            <p>Model Type: {{product['model_type']}}</p>
+                                                            <p>Brand:<span>{{product['p_brand']}}</span></p><br>
+                                                            <p>Connectivity: {{product['p_connectivity']}}</p><br>
+                                                            <p>Model Type: {{product['p_model_type']}}</p>
                                                         </div>
                                                         <h3 class="view-price">
-                                                            <span>${{product['price']}}</span>
+                                                            <span>${{product['p_price']}}</span>
                                                         </h3>
-                                                        <p class="view-desc">{{product['description']}}</p>
+                                                        <p class="view-desc">{{product['p_description']}}</p>
                                                         <div class="view-add-group">
                                                             <button class="product-add" title="Add to Cart">
                                                                 <i class="fas fa-shopping-basket"></i>
@@ -453,17 +453,17 @@
                                                             </button>
                                                             <div class="product-action">
                                                                 <form action="{{url_for('addcart')}}" method="post" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-                                                                    <input class="action-input" title="Quantity Number" type="number" id="quantity" name="quantity" value="1" min="1" max="{{product['quantity']}}">
-                                                                    <input type="hidden" id="p_id" name="p_id" value="{{product['ID']}}">
-                                                                    <input type="hidden" id="name" name="name" value="{{product['name']}}">
-                                                                    <input type="hidden" id="price" name="price" value="{{product['price']}}">
-                                                                    <input type="hidden" id="cost" name="cost" value="{{product['cost']}}">
-                                                                    <input type="hidden" id="stock" name="stock" value="{{product['quantity']}}">
-                                                                    <input type="hidden" id="brand" name="brand" value="{{product['brand']}}">
-                                                                    <input type="hidden" id="connectivity" name="connectivity" value="{{product['connetivity']}}">
-                                                                    <input type="hidden" id="earplacement" name="earplacement" value="{{product['earplacement']}}">
-                                                                    <input type="hidden" id="desc" name="desc" value="{{product['description']}}">
-                                                                    <input type="hidden" id="image" name="image" value="{{product['image']}}">                                                                
+                                                                    <input class="action-input" title="Quantity Number" type="number" id="quantity" name="quantity" value="1" min="1" max="{{product['p_quantity']}}">
+                                                                    <input type="hidden" id="p_id" name="p_id" value="{{product['product_ID']}}">
+                                                                    <input type="hidden" id="name" name="name" value="{{product['p_name']}}">
+                                                                    <input type="hidden" id="price" name="price" value="{{product['p_price']}}">
+                                                                    <input type="hidden" id="cost" name="cost" value="{{product['p_cost']}}">
+                                                                    <input type="hidden" id="stock" name="stock" value="{{product['p_quantity']}}">
+                                                                    <input type="hidden" id="brand" name="brand" value="{{product['p_brand']}}">
+                                                                    <input type="hidden" id="connectivity" name="connectivity" value="{{product['p_connetivity']}}">
+                                                                    <input type="hidden" id="earplacement" name="earplacement" value="{{product['p_earplacement']}}">
+                                                                    <input type="hidden" id="desc" name="desc" value="{{product['p_description']}}">
+                                                                    <input type="hidden" id="image" name="image" value="{{product['p_image']}}">                                                                
                                                                     <input class="action-input" type="submit" value="Add">
                                                                 </form>
                                                             </div> 

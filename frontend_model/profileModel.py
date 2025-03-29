@@ -6,14 +6,14 @@ from passlib.handlers.sha2_crypt import sha256_crypt
 def getUserModel():
     user = []
     db = Dbconnect()
-    query = "SELECT * FROM Customer WHERE ID = %s"
+    query = "SELECT * FROM customer WHERE customer_ID = %s AND c_status = 'active'"
     # Find user via the customer ID saved in session
     userFound = db.select(query, session['customer'])
 
     # Save tuple information in a list
     for users in userFound:
-        user.append({"id": users['ID'], "name": users['first_name'], "last_name": users['last_name'], "email": users['email'],
-                     "password": users['password'], "phone_number": users['phone_number'], "status": users['status']})
+        user.append({"id": users['customer_ID'], "name": users['c_first_name'], "last_name": users['c_last_name'], "email": users['c_email'],
+                     "password": users['c_password'], "phone_number": users['c_phone_number'], "status": users['c_status']})
 
     # Example: to access user info:
 
@@ -24,7 +24,7 @@ def getUserModel():
 
 def editnumbermodel(number):
     db = Dbconnect()
-    query = "UPDATE Customer SET phone_number = %s WHERE ID = %s"
+    query = "UPDATE customer SET c_phone_number = %s WHERE customer_ID = %s"
     try:
         db.execute(query, (number, session['customer']))
         return 0
@@ -34,21 +34,21 @@ def editnumbermodel(number):
         return 1
 
 
-def addaddressmodel(aline1, state, zipcode, city):
+def addaddressmodel(street, state, postal_code, city):
     db = Dbconnect()
-    query = ("INSERT INTO Address (ID, street, city, state, postal_code)"
+    query = ("INSERT INTO address (address_ID, ad_street, ad_city, ad_state, ad_postal_code)"
              " VALUES(%s, %s, %s, %s, %s)")
 
-    db.execute(query, (session['customer'], aline1, city, state, zipcode))
+    db.execute(query, (session['customer'], street, city, state, postal_code))
 
     return 0
 
-def editaddressmodel(aline1, state, zipcode, city, a_id):
+def editaddressmodel(street, state, postal_code, city, a_id):
     db = Dbconnect()
-    query = ("UPDATE Address SET street = %s, city = %s, "
-             "state = %s postal_code = %s WHERE customer_ID = %s AND ID = %s")
+    query = ("UPDATE address SET ad_street = %s, ad_city = %s, "
+             "ad_state = %s ad_postal_code = %s WHERE customer_ID = %s AND address_ID = %s")
     try:
-        db.execute(query, (aline1, city, state, zipcode, session['customer'], a_id))
+        db.execute(query, (street, city, state, postal_code, session['customer'], a_id))
         return 0
 
     except pymysql.Error as error:
@@ -58,7 +58,7 @@ def editaddressmodel(aline1, state, zipcode, city, a_id):
 
 def getpaymentmodel(customer):
     db = Dbconnect()
-    query = "SELECT * FROM payment_method WHERE c_id = %s"
+    query = "SELECT * FROM payment_method WHERE customer_id = %s"
 
     try:
         methods = db.select(query, (customer,))
@@ -76,7 +76,7 @@ def editpaymentmodel(name, c_type, number, exp_date):
 
 def editprofilemodel(fname, lname, email):
     db = Dbconnect()
-    query = "UPDATE Customer SET first_name = %s, last_name = %s, email = %s WHERE ID = %s"
+    query = "UPDATE customer SET c_first_name = %s, c_last_name = %s, c_email = %s WHERE customer_ID = %s"
     try:
         db.execute(query,(fname, lname, email, session['customer']))
         return 0
@@ -88,7 +88,7 @@ def editprofilemodel(fname, lname, email):
 
 def getAddressModel(customer):
     db = Dbconnect()
-    sql = "SELECT * FROM Address WHERE ID = %s"
+    sql = "SELECT * FROM address WHERE address_ID = %s"
     result = db.select(sql, (customer))
 
     return result
@@ -98,20 +98,20 @@ def changepassmodel(email):
     passw = ''
     # Connect to MySQL database server using credentials provided
     db = Dbconnect()
-    query = "SELECT * FROM Customer WHERE email = %s"
+    query = "SELECT * FROM customer WHERE c_email = %s"
 
     userFound = db.select(query, email)
 
     for users in userFound:
         # Save the user's password in 'passw'
-        passw = users['password']
+        passw = users['c_password']
 
     # Encrypt the password using the sha256_crypt function
     hash = sha256_crypt.encrypt(passw)
 
     try:
         # Once encrypted, save this new hashed password to DB
-        query2 = "UPDATE Customer SET password = %s WHERE email = %s "
+        query2 = "UPDATE customer SET c_password = %s WHERE c_email = %s "
         db.execute(query2, (hash, email))
         return 1
 

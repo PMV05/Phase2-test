@@ -1,6 +1,5 @@
 from frontend_model.cartModel import *
 
-#TODO: 
 def getCart():
     # Go to cartModel to get cart items and session variables: total and quantity
     if 'amount' not in session:
@@ -19,5 +18,4 @@ def addCartController(p_id, name, image, price, stock, quantity, total):
 
 
 def deleteCartItem(p_id):
-    # TODO: FOR STUDENT TO ADD
     return deleteCartItemModel(p_id)

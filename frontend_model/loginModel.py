@@ -4,40 +4,19 @@ from frontend_model.connectDB import *
 import pymysql
 from passlib.hash import sha256_crypt
 
-# # This is a very basic dictionary with information for logging in
-# # Simulating our database
-# thisDict = {
-#     "email": "javier.quinones3@upr.edu",
-#     "password": "pass1234",
-#     "user": "Javier"
-# }
-
-
-# def loginmodel(email, password):
-#     # Receive email and password to check in the "database"
-#     if email in thisDict.values() and password in thisDict.values():
-#         # If it found the email and pass in the dictionary
-#         session['customer'] = thisDict['user']
-#         # Create the session['customer']
-#         return "true"
-#     else:
-#         # If it didn't find user
-#         return "false"
-
 def loginmodel(email, password):
 
     # Receive email and password to check in the "database"
-
     user = []
     db = Dbconnect()
-    sql = "SELECT email, ID, password, status FROM Customer WHERE email = %s"
+    sql = "SELECT c_email, customer_ID, c_password, c_status FROM customer WHERE c_email = %s"
     # Save user info in list
     userFound = db.select(sql, (email,))
 
     print(userFound)
 
     for res in userFound:
-        user.append({"id": res['ID'], "email": res['email'], "password": res['password'], "status": res['status']})
+        user.append({"id": res['customer_ID'], "email": res['c_email'], "password": res['c_password'], "status": res['c_status']})
 
 
     # Save user info in list
@@ -60,7 +39,7 @@ def registermodel(fname, lname, email, password):
 
     # TODO: Falta verificar que el usuario no esté en la base de datos
             
-    sql = "INSERT INTO Customer (first_name, last_name, email, password, status) VALUES (%s, %s, %s, %s, %s)" 
+    sql = "INSERT INTO customer (c_first_name, c_last_name, c_email, c_password, c_status) VALUES (%s, %s, %s, %s, %s)" 
 
     status = 'active'
 
