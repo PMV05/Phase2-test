@@ -36,3 +36,24 @@ def getUserCheckout():
     return {
         "phone_number": "1234567890"  # Simula un número de teléfono
     }
+def editCheckoutQuantity(product_id, new_quantity):
+    db = Dbconnect()
+    if new_quantity > 0:
+        query = "UPDATE order_product SET op_product_quantity = %s WHERE product_id = %s AND customer_id = %s"
+        db.execute(query, (new_quantity, product_id, session['customer']))
+        return True  # Successfully updated
+    
+        
+    
+def saveCartToDB():
+    if 'cart' not in session or not session['cart']:
+        return False  # No cart data to save
+
+    db = Dbconnect()
+
+    for key, item in session['cart'].items():
+        query = "INSERT INTO order_product (order_id, op_product_id, op_product_quantity, op_product_price) VALUES (%s, %s, %s, %s)"
+        db.execute(query, (session['customer'], key, item['quantity'], item['total_price']))
+
+    session.pop('cart')  # Clear session cart after saving
+    return True

@@ -149,7 +149,7 @@
                                     <button class="action"> Edit</button>
                                 </div>
                             </form> 
-                            <h6>${{ '%.2f'|format(item['total_price']) }}</h6>
+                            <h6>${{ '{:.2f}'.format(item['total_price']|float) }}</h6>
                         </div>
                     </div>
                 </li>
