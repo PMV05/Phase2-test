@@ -373,6 +373,30 @@ def editcart():
         session.modified = True
     
     return redirect(request.referrer)
+@app.route('/delete-cart-item/<int:product_id>', methods=['POST'])
+def delete_cart_item(product_id):
+    if 'cart' in session and str(product_id) in session['cart']:
+        session['cart'].pop(str(product_id))  
+        session.modified = True  
+
+    return redirect(url_for('checkout'))  # Refresh checkout page
+
+@app.route('/edit-checkout-item/<int:product_id>', methods=['POST'])
+def edit_checkout_item(product_id):
+    """ Updates the quantity of a specific item in the session cart """
+    new_quantity = int(request.form.get('quantity', 1))  # Get new quantity
+
+    if 'cart' in session and str(product_id) in session['cart']:
+        if new_quantity > 0:
+            session['cart'][str(product_id)]['quantity'] = new_quantity
+            session['cart'][str(product_id)]['total_price'] = new_quantity * session['cart'][str(product_id)]['price']
+        else:
+            session['cart'].pop(str(product_id))  # Remove if quantity is 0
+
+        session.modified = True  # Ensure session updates
+
+    return redirect(url_for('checkout')) 
+
 
 @app.route("/checkout")
 def checkout():
