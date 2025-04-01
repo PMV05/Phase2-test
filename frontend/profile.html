@@ -197,19 +197,19 @@
                                     <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
                                             <label class="form-label">name</label>
-                                            <input class="form-control" type="text" placeholder="{{user1['first_name']}}">
+                                            <input class="form-control" type="text" placeholder="{{user1['c_first_name']}}">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
                                             <label class="form-label">last name</label>
-                                            <input class="form-control" type="text" placeholder="{{user1['last_name']}}">
+                                            <input class="form-control" type="text" placeholder="{{user1['c_last_name']}}">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
                                             <label class="form-label">Email</label>
-                                            <input class="form-control" type="email" placeholder="{{user1['email']}}">
+                                            <input class="form-control" type="email" placeholder="{{user1['c_email']}}">
                                         </div>
                                     </div>
                                     <div class="col-lg-2">
@@ -249,9 +249,9 @@
                                 <div class="row">
                                     <div class="col-md-6 col-lg-4 alert fade show">
                                         <div class="profile-card address active">
-                                            <p>{{user1['street']}}</p><br>
-                                            <!-- <p>{{user1['c_address_line_2']}}</p><br> -->
-                                            <p>{{user1['city']}}, {{user1['state']}} {{user1['postal_code']}}</p>
+                                            <p>{{user1['ad_street']}}</p><br>
+                                            <p>{{user1['ad_city']}}, {{user1['ad_state']}} {{user1['ad_postal_code']}}</p>
+
                                         </div>
                                     </div>
                                 </div>
@@ -268,11 +268,10 @@
                                 <div class="row">
                                     <div class="col-md-6 col-lg-4 alert fade show">
                                         <div class="payment-card payment active">
-                                            <h2>{{user1['c_card_name']}}</h2>
-                                            <p>{{user1['c_card_num']}} </p>
-                                            <h5>{{user1['c_card_type']}}</h5>
-                                            <h6>{{user1['c_exp_date']}}</h6>
+                                            <h5>PayPal</h5>
+                                            <p>{{user['payment_email']}}</p>
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -301,7 +300,8 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">number</label>
-                            <input class="form-control" name="number" type="number" value="{{user1['phone_number']}}">
+                            <input class="form-control" name="number" type="number" value="{{user1['c_phone_number']}}">
+
                         </div>
                         <button class="form-btn" type="submit">save contact number</button>
                         <input type="hidden" name="page" value="/profile">
@@ -322,7 +322,7 @@
 
                         <div class="form-group">
                             <label class="form-label">Street</label>
-                            <input type="text" name="street" class="form-control" value="{{user1['address_line_1']}}"></input>
+                            <input type="text" name="street" class="form-control" value="{{user1['ad_street']}}"></input>
                         </div>
                         <div class="form-group">
                             <label class="form-label">City</label>
@@ -353,23 +353,21 @@
                             <h3>edit payment info</h3>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">card name</label>
-                            <input class="form-control" name="card_name" type="text" value="{{user1['c_card_name']}}">
+                            <label class="form-label">PayPal Email</label>
+                            <input class="form-control" name="paypal_email" type="email" value="{{user['payment_email']}}">
                         </div>
+                        
                         <div class="form-group">
-                            <label class="form-label">card number</label>
-                            <input class="form-control" name="card_num" type="number" value="{{user1['c_card_num']}}">
+                            <label class="form-label">Zip Code</label>
+                            <input class="form-control" name="postal_code" type="text" value="{{user1['ad_postal_code']}}">
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">card type</label>
-                            <input class="form-control" name="card_type" type="text" value="{{user1['c_card_type']}}">
-                        </div>
-                        <div class="form-group">
+                        
+                        <!-- <div class="form-group">
                             {% set exp_date_components = user1['c_exp_date'].split('-') %}
                             {% set exp_date = exp_date_components[2] ~ '-' ~ exp_date_components[0] ~ '-' ~ exp_date_components[1] %}
                             <label class="form-label">expiration date (MM/DD/YYYY)</label>
                             <input class="form-control" name="date" type="date" value="{{user1['c_exp_date']}}">
-                        </div>
+                        </div> --> 
                         <button class="form-btn" type="submit">save payment info</button>
                         <input type="hidden" name="page" value="/profile">
                     </form>
@@ -383,24 +381,15 @@
                 <div class="modal-content">
                     <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
                     <form class="modal-form" action="{{url_for('editinfo')}}" method="post">
-                        <div class="form-title">
-                            <h3>edit profile info</h3>
-                        </div>
+                        <div class="form-title"><h3>Edit PayPal Email</h3></div>
                         <div class="form-group">
-                            <label class="form-label">First Name</label>
-                            <input class="form-control" name="fname" type="text" value="{{user1['first_name']}}">
+                            <label class="form-label">PayPal Email</label>
+                            <input class="form-control" name="paypal_email" type="email" value="{{user['payment_email']}}">
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Last Name</label>
-                            <input class="form-control" name="lname" type="text" value="{{user1['last_name']}}">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">email</label>
-                            <input class="form-control" name="email" type="text" value="{{user1['email']}}">
-                        </div>
-                        <input type="hidden" name="page" id="page" value="/profile">
-                        <button class="form-btn" type="submit">save profile info</button>
+                        <input type="hidden" name="postType" value="editpayment">
+                        <button class="form-btn" type="submit">Save PayPal</button>
                     </form>
+                    
                 </div>
             </div>
         </div>

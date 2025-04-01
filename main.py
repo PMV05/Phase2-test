@@ -1,6 +1,4 @@
 from functools import wraps # TODO:
-
-
 from datetime import datetime
 # TODO:
 import pymysql
@@ -195,17 +193,24 @@ def shop():
                            sortingSelected=sortingSelected, orderSelected=orderSelected)
 
 #TODO: 
-@app.route("/profile")
+@app.route('/profile')
 @login_required
 def profile():
-    # To open the user's profile page
-    # Get user info from getUser() in profileController
-    user = getUser()
-    ship = getAddress(session['customer'])
-    method = getpaymentcontroller()
+    db = Dbconnect()
+    cursor = db.conn.cursor(dictionary=True)
+    query = """
+        SELECT c.c_first_name, c.c_last_name, c.c_email, c.c_phone_number,
+            a.ad_street, a.ad_city, a.ad_state, a.ad_postal_code,
+            pm.payment_email
+        FROM customer c
+        JOIN address a ON c.customer_ID = a.customer_ID
+        JOIN payment_method pm ON c.customer_ID = pm.customer_ID
+        WHERE c.customer_ID = %s
+    """
+    cursor.execute(query, (session['user_id'],))
+    user = cursor.fetchone()
+    return render_template("profile.html", user=[user], num=user['c_phone_number'])  # 👈 debe ser lista para el for-loop
 
-    # Since I specified the variable as user1, that is how it will be called on the html page
-    return render_template("profile.html", user1=user, shipping_addresses=ship, payment_methods=method)
 
 # TODO:
 @app.route("/addinfo", methods=["POST"])
@@ -241,8 +246,9 @@ def editinfo():
 
     # If editing payment info -> profileController
     elif postType == 'editpayment':
-        print("STUDENTS MUST ADD EDIT PAYMENT METHOD FUNCTION")
-        # TODO: FOR STUDENTS TO ADD
+        paypal_email = request.form.get('paypal_email')
+        editpaymentcontroller(paypal_email)
+
 
     # If editing phone_number, edit phone_number -> profileController
     elif postType == 'editnumber':

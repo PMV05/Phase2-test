@@ -10,24 +10,20 @@ def getAddress(customer):
 def editnumbercontroller(number):
     return editnumbermodel(number)
 
-def addaddresscontroller(aline1, state, zipcode, city):
-    return addaddressmodel(aline1, state, zipcode, city)
+def addaddresscontroller(street, state, zipcode, city):
+    return addaddressmodel(street, state, zipcode, city)
 
-
-def editaddresscontroller(aline1, state, zipcode, city, a_id):
-    return editaddressmodel(aline1, state, zipcode, city, a_id)
+def editaddresscontroller(street, state, zipcode, city, a_id):
+    return editaddressmodel(street, state, zipcode, city, a_id)
 
 def getpaymentcontroller():
     return getpaymentmodel(session['customer'])
 
-
-def editpaymentcontroller(name, c_type, number, exp_date):
-    return editpaymentmodel(name, c_type, number, exp_date)
-
+def editpaymentcontroller(paypal_email):
+    return editpaymentemailmodel(paypal_email)
 
 def editprofilecontroller(fname, lname, email):
     return editprofilemodel(fname, lname, email)
-
 
 def changePass(email):
     return changepassmodel(email)
