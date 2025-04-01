@@ -25,15 +25,15 @@ def getUserModel():
         for u in userFound:
             user.append({
                 "id": u['customer_ID'],
-                "c_first_name": u['c_first_name'],
-                "c_last_name": u['c_last_name'],
-                "c_email": u['c_email'],
-                "c_phone_number": u['c_phone_number'],
-                "c_status": u['c_status'],
-                "ad_street": u['ad_street'],
-                "ad_city": u['ad_city'],
-                "ad_state": u['ad_state'],
-                "ad_postal_code": u['ad_postal_code'],
+                "first_name": u['c_first_name'],
+                "last_name": u['c_last_name'],
+                "email": u['c_email'],
+                "phone_number": u['c_phone_number'],
+                "status": u['c_status'],
+                "street": u['ad_street'],
+                "city": u['ad_city'],
+                "state": u['ad_state'],
+                "postal_code": u['ad_postal_code'],
                 "payment_email": u['payment_email']
             })
         return user

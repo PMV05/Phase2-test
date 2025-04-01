@@ -37,7 +37,7 @@
 }
 
 .profile-btn a:hover {
-  background: var(--green);
+  background:#f56b53;
 }
 
 @media (max-width: 991px) {

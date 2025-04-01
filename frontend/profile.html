@@ -223,8 +223,8 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">number</label>
-                            <input class="form-control" name="number" type="number" value="{{user1['c_phone_number']}}">
-
+                            <input class="form-control" name="number" type="number" value="{{user1['phone_number']}}">
+                            
                         </div>
                         <button class="form-btn" type="submit">save contact number</button>
                         <input type="hidden" name="page" value="/profile">
@@ -245,7 +245,7 @@
 
                         <div class="form-group">
                             <label class="form-label">Street</label>
-                            <input type="text" name="street" class="form-control" value="{{user1['ad_street']}}"></input>
+                            <input type="text" name="street" class="form-control" value="{{user1['street']}}"></input>
                         </div>
                         <div class="form-group">
                             <label class="form-label">City</label>
@@ -282,7 +282,7 @@
                         
                         <div class="form-group">
                             <label class="form-label">Zip Code</label>
-                            <input class="form-control" name="postal_code" type="text" value="{{user1['ad_postal_code']}}">
+                            <input class="form-control" name="postal_code" type="text" value="{{user1['postal_code']}}">
                         </div>
                         
                         <!-- <div class="form-group">
@@ -304,14 +304,26 @@
                 <div class="modal-content">
                     <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
                     <form class="modal-form" action="{{url_for('editinfo')}}" method="post">
-                        <div class="form-title"><h3>Edit PayPal Email</h3></div>
+                        <div class="form-title"><h3>Edit Profile</h3></div>
+                    
                         <div class="form-group">
-                            <label class="form-label">PayPal Email</label>
-                            <input class="form-control" name="paypal_email" type="email" value="{{user['payment_email']}}">
+                            <label class="form-label">First Name</label>
+                            <input class="form-control" name="fname" type="text" value="{{user1['first_name']}}">
                         </div>
-                        <input type="hidden" name="postType" value="editpayment">
-                        <button class="form-btn" type="submit">Save PayPal</button>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input class="form-control" name="lname" type="text" value="{{user1['last_name']}}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input class="form-control" name="email" type="email" value="{{user1['email']}}">
+                        </div>
+                    
+                        <input type="hidden" name="postType" value="editprofile">
+                        <input type="hidden" name="page" value="/profile">
+                        <button class="form-btn" type="submit">Save Profile</button>
                     </form>
+                    
                     
                 </div>
             </div>
