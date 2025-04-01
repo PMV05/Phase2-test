@@ -118,10 +118,11 @@
         <!--=====================================
                     CHECKOUT PART START
         =======================================-->
+
         <section class="inner-section checkout-part">
             <div class="container">
                 <div class="row">
-
+        
                     <div class="col-lg-12">
                         <div class="account-card">
                             <div class="account-title">
@@ -158,7 +159,7 @@
                                                     </form>
                                                 </td>
                                             </tr>
-
+        
                                         <div class="modal fade" id="product-view-{{key}}">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -173,51 +174,63 @@
                                                                 <ul class="preview-slider">
                                                                     <li><img src="static/images/product-images/{{item['image']}}" alt="product"></li>
                                                                 </ul>
-
+        
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6 col-lg-6">
-                                                            <div class="view-details">
-                                                                <h3 class="view-name">
-                                                                    <a href="product-video.html">{{item['name']}}</a>
-                                                                </h3>
-                                                                <div class="view-meta">
-                                                                    <p>Brand:<span>{{item['brand']}}</span></p><br>
-                                                                    <p>Wi-fi: {{item['wifi']}}</p><br>
-                                                                    <p>Video Res: ${{item['videores']}}</p>
-                                                                </div>
-                                                                <h3 class="view-price">
-                                                                    <span>${{item['price']}}0</span>
-                                                                </h3>
-                                                                <p class="view-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit non tempora magni repudiandae sint suscipit tempore quis maxime explicabo veniam eos reprehenderit fuga</p>
-                                                                <div class="view-add-group">
-                                                                    <button class="product-add" title="Add to Cart">
-                                                                        <span>Tap to change amount</span>
-                                                                    </button>
-                                                                    <div class="product-action">
-                                                                        <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
-                                                                        <input class="action-input" title="Quantity Number" type="text" name="quantity" value="{{item['quantity']}}">
-                                                                        <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
+                                                        <form method="POST" action="{{ url_for('edit_checkout_item', product_id=key)}}">
+                                                            <div class="col-md-6 col-lg-6">
+                                                                <div class="view-details">
+                                                                    <h3 class="view-name">
+                                                                        <a href="product-video.html">{{ item['name'] }}</a>
+                                                                    </h3>
+                                                                    <div class="view-meta">
+                                                                        <p>Brand:<span>{{ item['brand'] }}</span></p><br>
+                                                                        <p>Wi-fi: {{ item['wifi'] }}</p><br>
+                                                                        <p>Video Res: ${{ item['videores'] }}</p>
+                                                                    </div>
+                                                                    <h3 class="view-price">
+                                                                        <span>${{ item['price'] }}0</span>
+                                                                    </h3>
+                                                                    <p class="view-desc">
+                                                                        Lorem ipsum dolor sit amet consectetur adipisicing elit non tempora magni repudiandae sint suscipit tempore quis maxime explicabo veniam eos reprehenderit fuga
+                                                                    </p>
+                                                                    <div class="view-add-group">
+                                                                        <!-- This button now submits the form for a manual update -->
+                                                                        <button type="submit" name="action" value="update" class="product-add" title="Update Cart">
+                                                                            <span>Tap to change amount</span>
+                                                                        </button>
+                                                                        <div class="product-action">
+                                                                            <!-- Decrease Button -->
+                                                                            <button type="submit" name="action" value="decrease" class="action-minus" title="Quantity Minus">
+                                                                                <i class="icofont-minus"></i>
+                                                                            </button>
+                                                                            <!-- Quantity Input -->
+                                                                            <input class="action-input" title="Quantity Number" type="number" name="quantity" value="{{ item['quantity'] }}" min="0">
+                                                                            <!-- Increase Button -->
+                                                                            <button type="submit" name="action" value="increase" class="action-plus" title="Quantity Plus">
+                                                                                <i class="icofont-plus"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="view-action-group">
+                                                                        <a class="view-wish wish" href="/checkout">
+                                                                            <i class="fas fa-shopping-cart"></i>
+                                                                            <span>Edit Amount</span>
+                                                                        </a>
                                                                     </div>
                                                                 </div>
-                                                                <div class="view-action-group">
-                                                                    <a class="view-wish wish" href="/checkout">
-                                                                       <i class="fas fa-shopping-cart"></i>
-                                                                        <span>Edit Amount</span>
-                                                                    </a>
-                                                                </div>
-
                                                             </div>
-                                                        </div>
+                                                        </form>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
+        
                                         {% endfor %}
                                         {% endif %}
-
+        
                                         </tbody>
                                     </table>
                                 </div>
@@ -233,7 +246,7 @@
                             </div>
                         </div>
                     </div>
-
+        
                     <div class="col-lg-12">
                         <div class="account-card">
                             <div class="account-title">
@@ -245,7 +258,7 @@
                                     <div class="col-md-6 col-lg-4 alert fade show">
                                         <div class="profile-card contact active">
                                             <h6>primary</h6>
-                                            <p>{{num}}</p>
+                                            <p>{{ user1.phone_number }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -262,9 +275,8 @@
                                 <div class="row">
                                     <div class="col-md-6 col-lg-4 alert fade show">
                                         <div class="profile-card address active">
-                                            <p>{{user1[3]}}</p><br>
-                                            <p>{{user1[4]}}</p><br>
-                                            <p>{{user1[5]}}, {{user1[6]}} {{user1[7]}}</p>
+                                            <p>{{ user1.address_line1 }}</p><br>
+                                            <p>{{ user1.city }}, {{ user1.state }} {{ user1.postal_code }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -274,7 +286,7 @@
                     <div class="col-lg-12">
                         <div class="account-card mb-0">
                             <div class="account-title">
-                                <h4>PayPal</h4>
+                                <h4>payment option</h4>
                                 <button data-bs-toggle="modal" data-bs-target="#payment-add">add payment info</button>
                             </div>
                             <div class="account-content">
@@ -291,7 +303,7 @@
                             </div>
                         </div>
                     </div>
-
+        
                     <!-- contact add form -->
         <div class="modal fade" id="contact-add">
             <div class="modal-dialog modal-dialog-centered">
@@ -310,7 +322,7 @@
                 </div>
             </div>
         </div>
-
+        
         <!-- address add form -->
         <div class="modal fade" id="address-add">
             <div class="modal-dialog modal-dialog-centered">
@@ -320,7 +332,7 @@
                         <div class="form-title">
                             <h3>edit address info</h3>
                         </div>
-
+        
                         <div class="form-group">
                             <label class="form-label">Address Line 1</label>
                             <input type="text" class="form-control" value="{{user1[3]}}"></input>
@@ -342,7 +354,7 @@
                 </div>
             </div>
         </div>
-
+        
         <!-- payment add form -->
         <div class="modal fade" id="payment-add">
             <div class="modal-dialog modal-dialog-centered">
@@ -353,10 +365,10 @@
                             <h3>edit payment info</h3>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">email</label>
+                            <label class="form-label">card name</label>
                             <input class="form-control" type="text" value="{{user1[11]}}">
                         </div>
-                        <!-- <div class="form-group">
+                        <div class="form-group">
                             <label class="form-label">card number</label>
                             <input class="form-control" type="number" value="{{user1[13]}}">
                         </div>
@@ -366,15 +378,15 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">expiration date (MM/DD/YYYY)</label>
-                            <input class="form-control" type="date" value="{{user1[14]}}"> -->
-                        <!-- </div> -->
+                            <input class="form-control" type="date" value="{{user1[14]}}">
+                        </div>
                         <button class="form-btn" type="submit">save payment info</button>
                     </form>
                 </div>
             </div>
         </div>
-
-
+        
+        
                             <div class="checkout-proced">
                                 <a href="{{url_for('invoice')}}" class="btn btn-inline">proceed to checkout</a>
                             </div>
