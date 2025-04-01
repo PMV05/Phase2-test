@@ -1,7 +1,7 @@
 import pymysql
 from frontend_model.connectDB import *
 
-#TODO: VER EL CODIGO DE LA PROFE
+#TODO:
 
 def getProductsModel():
     db = Dbconnect()
@@ -15,9 +15,9 @@ def getBrandsModel():
     # Simulating grabbing these filters via SQL from the database
     db = Dbconnect()
     query = ("SELECT DISTINCT p_brand "
-             "FROM product "
-             "WHERE p_status = 'active'"
-             "ORDER BY p_brand;")
+            "FROM product "
+            "WHERE p_status = 'active'"
+            "ORDER BY p_brand;")
     brands = db.select(query)
     return brands
 
@@ -25,9 +25,9 @@ def getBrandsModel():
 def getColorsModel():
     db = Dbconnect()
     query = ("SELECT DISTINCT p_color "
-             "FROM product "
-             "WHERE p_status = 'active'"
-             "ORDER BY p_color;")
+            "FROM product "
+            "WHERE p_status = 'active'"
+            "ORDER BY p_color;")
     colors = db.select(query)
     return colors
 
@@ -35,9 +35,9 @@ def getColorsModel():
 def getTypeModel():
     db = Dbconnect()
     query = ("SELECT DISTINCT p_model_type "
-             "FROM product "
-             "WHERE p_status = 'active'"
-             "ORDER BY p_model_type;")
+            "FROM product "
+            "WHERE p_status = 'active'"
+            "ORDER BY p_model_type;")
     modelType = db.select(query)
     return modelType
 
@@ -45,9 +45,9 @@ def getTypeModel():
 def getConnectivityModel():
     db = Dbconnect()
     query = ("SELECT DISTINCT p_connectivity "
-             "FROM product "
-             "WHERE p_status = 'active'"
-             "ORDER BY p_connectivity;")
+            "FROM product "
+            "WHERE p_status = 'active'"
+            "ORDER BY p_connectivity;")
     connectivity = db.select(query)
     return connectivity
 
@@ -55,8 +55,8 @@ def getConnectivityModel():
 def getEarPlacementModel():
     db = Dbconnect()
     query = ("SELECT DISTINCT p_earplacement "
-             "FROM product "
-             "WHERE p_status = 'active';")
+            "FROM product "
+            "WHERE p_status = 'active';")
     earPlacement = db.select(query)
     return earPlacement
 

@@ -1,5 +1,5 @@
 from frontend_model.shopModel import *
-
+# TODO:
 
 def getProducts():
     products = getProductsModel()

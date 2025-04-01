@@ -1,6 +1,7 @@
 import pymysql
 import pymysql.cursors
 
+#TODO: H
 class Dbconnect:
     def __init__(self) -> None:
         self.connection = pymysql.connect(
@@ -9,7 +10,7 @@ class Dbconnect:
             port=24211,
             user='avnadmin',
             password='AVNS_hHeZnyU4Z0cK8LDHs5O',
-            cursorclass=pymysql.cursors.DictCursor  # ✅ define aquí el cursor por defecto
+            cursorclass=pymysql.cursors.DictCursor  
         )
         self.cursor = self.connection.cursor()
 

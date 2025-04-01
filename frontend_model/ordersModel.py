@@ -1,3 +1,8 @@
+
+
+
+#TODO: Hacer las funciones para eliminar  la simulacion 
+
 # Dictionary uniter
 def MagerDicts(dict1, dict2):
     if isinstance(dict1, list) and isinstance(dict2, list):

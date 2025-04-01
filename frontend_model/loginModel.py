@@ -1,8 +1,9 @@
 from flask import session
-# TODO: 
 from frontend_model.connectDB import *
 import pymysql
 from passlib.hash import sha256_crypt
+
+# TODO: 
 
 def loginmodel(email, password):
 
@@ -33,11 +34,12 @@ def loginmodel(email, password):
             # If it didn't find user
             return "false"
 
+# TODO: Falta verificar que el usuario no esté en la base de datos ( Efran lo esta trabajando )
 
 def registermodel(fname, lname, email, password):
     db = Dbconnect()
 
-    # TODO: Falta verificar que el usuario no esté en la base de datos
+    
             
     sql = "INSERT INTO customer (c_first_name, c_last_name, c_email, c_password, c_status) VALUES (%s, %s, %s, %s, %s)" 
 

@@ -64,13 +64,15 @@ def clear():
     return redirect("/")
 
 
-@app.route("/login", methods=['POST'])
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    # Enters here when logging in
+    if request.method == 'GET':
+        return render_template('log.html')
+    
     email = request.form.get('email')
     passcode = request.form.get('password')
-    # Receive your login information and send to the loginController's logincontroller()
     return logincontroller(email=email, password=passcode)
+
 
 # TODO:
 @app.route("/register/", defaults={'message': None})
@@ -196,8 +198,11 @@ def shop():
 @app.route('/profile')
 @login_required
 def profile():
+    if 'customer' not in session:
+        return redirect(url_for('enterpage', message='enter'))
+
     db = Dbconnect()
-    cursor = db.cursor
+    cursor = db.connection.cursor(pymysql.cursors.DictCursor)
 
     query = """
         SELECT c.c_first_name, c.c_last_name, c.c_email, c.c_phone_number,
@@ -210,7 +215,14 @@ def profile():
     """
     cursor.execute(query, (session['customer'],))  
     user = cursor.fetchone()
-    return render_template("profile.html", user=[user], num=user['c_phone_number'])  
+
+    if user is None:
+        return render_template("profile.html", user=[], num="No disponible")
+
+    return render_template("profile.html", user=[user], num=user['c_phone_number'])
+
+
+
 
 
 

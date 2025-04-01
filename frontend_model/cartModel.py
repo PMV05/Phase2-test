@@ -1,5 +1,5 @@
 from flask import session
-
+# TODO:  Se trabajo en  las funciones getcart / add cart 
 # Dictionary uniter
 def MagerDicts(dict1, dict2):
     if isinstance(dict1, list) and isinstance(dict2, list):
