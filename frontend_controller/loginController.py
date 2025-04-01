@@ -2,21 +2,20 @@ from frontend_model.loginModel import *
 from flask import redirect, render_template
 
 
+from frontend_model.loginModel import *
+from flask import redirect, render_template, session  # Asegúrate de importar session
+
 def logincontroller(email, password):
-    result = loginmodel(email=email, password=password)
-    # Check from loginModel's loginmodel() if user exists
+    user = loginmodel(email=email, password=password)
 
-    if 'request' in session:
-        request = session['request']
-        session.pop('request', None)
-        return redirect(request)
-
-    if result == "true":
-        # If user exists, enter shop
+    if user:
+        if 'request' in session:
+            request_url = session.pop('request')
+            return redirect(request_url)
         return redirect("/shop")
     else:
-        # If user doesn't exist, return to login and trigger error message
-        return redirect("/message")
+        return redirect("/wrong")
+
 
 
 def registercontroller(fname, lname, email, pass1, pass2):

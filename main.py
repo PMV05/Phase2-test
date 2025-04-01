@@ -64,15 +64,13 @@ def clear():
     return redirect("/")
 
 
-@app.route("/login", methods=['GET', 'POST'])
+@app.route("/login", methods=['POST'])
 def login():
-    if request.method == 'GET':
-        return render_template('log.html')
-    
+    # Enters here when logging in
     email = request.form.get('email')
     passcode = request.form.get('password')
+    # Receive your login information and send to the loginController's logincontroller()
     return logincontroller(email=email, password=passcode)
-
 
 # TODO:
 @app.route("/register/", defaults={'message': None})
@@ -194,7 +192,6 @@ def shop():
                            connectivitySelected=connectivitySelected, placementSelected=placementSelected,
                            sortingSelected=sortingSelected, orderSelected=orderSelected)
 
-#TODO: 
 @app.route('/profile')
 @login_required
 def profile():
@@ -205,26 +202,34 @@ def profile():
     cursor = db.connection.cursor(pymysql.cursors.DictCursor)
 
     query = """
-        SELECT c.c_first_name, c.c_last_name, c.c_email, c.c_phone_number,
-            a.ad_street, a.ad_city, a.ad_state, a.ad_postal_code,
-            pm.payment_email
-        FROM customer c
-        JOIN address a ON c.customer_ID = a.customer_ID
-        JOIN payment_method pm ON c.customer_ID = pm.customer_ID
-        WHERE c.customer_ID = %s
-    """
-    cursor.execute(query, (session['customer'],))  
+    SELECT 
+        c.c_first_name AS first_name, 
+        c.c_last_name AS last_name, 
+        c.c_email AS email, 
+        c.c_phone_number,
+        a.ad_street AS street,
+        a.ad_city AS city,
+        a.ad_state AS state,
+        a.ad_postal_code AS postal_code,
+        pm.payment_email
+    FROM customer c
+    LEFT JOIN address a ON c.customer_ID = a.customer_ID
+    LEFT JOIN payment_method pm ON c.customer_ID = pm.customer_ID
+    WHERE c.customer_ID = %s
+"""
+
+
+
+
+    print("CUSTOMER ID:", session.get('customer'))
+
+    cursor.execute(query, (session['customer'],))
     user = cursor.fetchone()
 
     if user is None:
         return render_template("profile.html", user=[], num="No disponible")
 
     return render_template("profile.html", user=[user], num=user['c_phone_number'])
-
-
-
-
-
 
 # TODO:
 @app.route("/addinfo", methods=["POST"])
