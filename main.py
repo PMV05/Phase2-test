@@ -197,7 +197,8 @@ def shop():
 @login_required
 def profile():
     db = Dbconnect()
-    cursor = db.conn.cursor(dictionary=True)
+    cursor = db.cursor
+
     query = """
         SELECT c.c_first_name, c.c_last_name, c.c_email, c.c_phone_number,
             a.ad_street, a.ad_city, a.ad_state, a.ad_postal_code,
@@ -207,9 +208,10 @@ def profile():
         JOIN payment_method pm ON c.customer_ID = pm.customer_ID
         WHERE c.customer_ID = %s
     """
-    cursor.execute(query, (session['user_id'],))
+    cursor.execute(query, (session['customer'],))  
     user = cursor.fetchone()
-    return render_template("profile.html", user=[user], num=user['c_phone_number'])  # 👈 debe ser lista para el for-loop
+    return render_template("profile.html", user=[user], num=user['c_phone_number'])  
+
 
 
 # TODO:
