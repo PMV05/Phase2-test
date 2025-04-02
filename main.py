@@ -244,51 +244,71 @@ def addinfo():
         addaddresscontroller(street, state, postal_code, city)
 
     elif postType == 'addpayment':
-        print("STUDENTS MUST ADD THE ADD PAYMENT METHOD FUNCTION")
-        # TODO: FOR STUDENTS TO ADD
-
+        payment_email = request.form.get('payment_email')
+        payment_postal_code = request.form.get('payment_postal_code')
+        customer_ID = request.form.get('customer_ID')
+        addpaymentcontroller(payment_email, payment_postal_code, customer_ID)
     return redirect(request.referrer)
 
 # TODO:
 @app.route("/editinfo", methods=["POST"])
 def editinfo():
-    postType = request.form.get('postType')
 
-    # If editing address info, edit address -> profileController
-    if postType == 'editaddress':
-        street = request.form.get('street')
-        state = request.form.get('state')
-        postal_code = request.form.get('postal_code')
-        city = request.form.get('city')
-        address_id = request.form.get('address_id')
-        editaddresscontroller(street, state, postal_code, city, address_id)
+        if  request.form.get('number'):
+            number = request.form['number']
+            editnumbercontroller(number)
+            return redirect("/profile")
 
-    # If editing payment info -> profileController
-    elif postType == 'editpayment':
-        paypal_email = request.form.get('paypal_email')
-        editpaymentcontroller(paypal_email)
+        elif request.form.get('street') and request.form.get('city') and request.form.get('state') and request.form.get('postal_code'):
+            street = request.form['street']
+            city = request.form['city']
+            state = request.form['state']
+            postal_code = request.form['postal_code']
+            # address_id = request.form.get('address_id')
+            editaddresscontroller(street, city, state, postal_code)
+            return redirect("/profile")
 
+        elif request.form.get('paypal_email'):
+            paypal_email = request.form['paypal_email']
+            editpaymentcontroller(paypal_email)
+            return redirect("/profile")
 
-    # If editing phone_number, edit phone_number -> profileController
-    elif postType == 'editnumber':
-        number = request.form.get('number')
-        editnumbercontroller(number)
+        elif all(request.form.get(k) for k in ['fname', 'lname', 'email']):
+            fname = request.form['fname']
+            lname = request.form['lname']
+            email = request.form['email']
+            editprofilecontroller(fname, lname, email)
+            return redirect("/profile")
 
-    # If editing main info -> profileController
-    elif postType == 'editprofile':
-        fname = request.form.get('fname')
-        lname = request.form.get('lname')
-        email = request.form.get('email')
-        editprofilecontroller(fname, lname, email)
-
-    return redirect(request.referrer)
-
+        return redirect(request.referrer)
 
 @app.route("/password", methods=["GET", "POST"])
 def password():
-    # Si es POST, procesar el cambio (puedes agregarlo después)
-    # Si es GET, solo mostrar el formulario TODO: VERIFICAR!!!
-    return render_template("change-password.html")
+    user = getUser()
+
+    if request.method == "GET":  # si se le da a reset change password en el perfil
+        return render_template("change-password.html")  # te lleva a la página
+
+    if request.method == "POST":  # si se hace submit al form de change password
+        # pass_o, pass_n y pass_n1 es como están en change-password.html
+        old_pass = request.form['pass_o']
+        new_pass = request.form['pass_n']
+        confirm_new_pass = request.form['pass_n1']
+
+        if new_pass != confirm_new_pass:
+            return "Passwords must match"
+
+        # se guarda el current pass
+        current_pass = user[0]['password']  # aquí se pone ['password'] y no ['pass']
+
+        # se verifica si el pass viejo es el correcto
+        if not sha256_crypt.verify(old_pass, current_pass):
+            return "Incorrect old password"
+
+        changePass(user[0]['email'], new_pass)  # toma el primer user que se encontró
+
+        return redirect("/profile")
+
 
 @app.route("/reset-password")
 def resetpasswordpage():

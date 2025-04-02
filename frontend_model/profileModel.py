@@ -11,7 +11,7 @@ from datetime import datetime
 def getUserModel():
     db = Dbconnect()
     query = '''
-        SELECT c.customer_ID, c.c_first_name, c.c_last_name, c.c_email, c.c_phone_number, c.c_status,
+        SELECT c.customer_ID, c.c_first_name, c.c_last_name, c.c_email,c.c_password, c.c_phone_number, c.c_status,
             a.ad_street, a.ad_city, a.ad_state, a.ad_postal_code,
             pm.payment_email
         FROM customer c
@@ -28,6 +28,7 @@ def getUserModel():
                 "first_name": u['c_first_name'],
                 "last_name": u['c_last_name'],
                 "email": u['c_email'],
+                "password": u['c_password'],
                 "phone_number": u['c_phone_number'],
                 "status": u['c_status'],
                 "street": u['ad_street'],
@@ -61,13 +62,28 @@ def addaddressmodel(street, state, postal_code, city):
     except pymysql.Error as error:
         print(error)
         return 1
+    
+    
+def addpaymentmodel(payment_email, payment_postal_code, customer_ID):
+    db = Dbconnect()
+    
 
-def editaddressmodel(street, state, postal_code, city, a_id):
+    query = """
+        INSERT INTO payment_method (payment_email, payment_postal_code, customer_ID)
+        VALUES (%s, %s, %s)
+    """
+    values = (payment_email, payment_postal_code, customer_ID)
+    db.execute(query, values)
+
+    db.close()
+
+
+def editaddressmodel(street, state, postal_code, city):
     db = Dbconnect()
     query = ("UPDATE address SET ad_street = %s, ad_city = %s, "
-            "ad_state = %s, ad_postal_code = %s WHERE customer_ID = %s AND address_ID = %s")
+            "ad_state = %s, ad_postal_code = %s WHERE customer_ID = %s")
     try:
-        db.execute(query, (street, city, state, postal_code, session['customer'], a_id))
+        db.execute(query, (street, city, state, postal_code, session['customer']))
         return 0
     except pymysql.Error as error:
         print(error)
@@ -111,17 +127,19 @@ def getAddressModel(customer):
         print(error)
         return []
 
-def changepassmodel(email):
+def changepassmodel(email , newPass):
+        # Connect to MySQL database server using credentials provided
     db = Dbconnect()
+
+    # Encrypt the password using the sha256_crypt function
+    hashed_new_pass = sha256_crypt.encrypt(newPass)
+
     try:
-        query = "SELECT c_password FROM customer WHERE c_email = %s"
-        userFound = db.select(query, (email,))
-        if userFound:
-            hash = sha256_crypt.hash(userFound[0]['c_password'])
-            query2 = "UPDATE customer SET c_password = %s WHERE c_email = %s "
-            db.execute(query2, (hash, email))
-            return 1
-        return 0
+        # Once encrypted, save this new hashed password to DB
+        query2 = "UPDATE customer SET c_password = %s WHERE c_email  = %s"
+        db.execute(query2, (hashed_new_pass, email))
+        return 1
+
     except pymysql.Error as error:
         print(error)
         return 0
