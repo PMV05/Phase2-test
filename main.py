@@ -344,16 +344,11 @@ def resetpassword():
 
 
 @app.route("/orders")
+@login_required
 def orders():
-    # TODO: TO BE CONNECTED TO MYSQL BY STUDENTS
-    # Redirects us to the orders list page of the user
-    # Fetches each order and its products from ordersController
-    order1 = getorder1()
-    products1 = getorder1products()
-    order2 = getorder2()
-    products2 = getorder2products()
-
-    return render_template("orderlist.html", order1=order1, products1=products1, order2=order2, products2=products2)
+    customer_id = session.get('customer')
+    orders = get_orders_controller(customer_id)
+    return render_template("orderlist.html", orders=orders)
 
 # TODO:
 @app.route("/addcart", methods=["POST"])
