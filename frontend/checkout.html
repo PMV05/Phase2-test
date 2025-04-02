@@ -285,17 +285,14 @@
                     <div class="col-lg-12">
                         <div class="account-card mb-0">
                             <div class="account-title">
-                                <h4>payment option</h4>
-                                <button data-bs-toggle="modal" data-bs-target="#payment-add">add payment info</button>
+                                <h4>Paypal Email</h4>
+                                <button data-bs-toggle="modal" data-bs-target="#payment-add">Edit Paypal</button>
                             </div>
                             <div class="account-content">
                                 <div class="row">
                                     <div class="col-md-6 col-lg-4 alert fade show">
                                         <div class="payment-card payment active">
-                                            <h2>{{user1[12]}}</h2>
-                                            <p>{{user1[13]}} </p>
-                                            <h5>{{user1[11]}}</h5>
-                                            <h6>{{user1[14]}}</h6>
+                                            <h5>{{user1['payment_email']}}</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -361,24 +358,17 @@
                     <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
                     <form class="modal-form">
                         <div class="form-title">
-                            <h3>edit payment info</h3>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">card name</label>
-                            <input class="form-control" type="text" value="{{user1[11]}}">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">card number</label>
-                            <input class="form-control" type="number" value="{{user1[13]}}">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">card type</label>
-                            <input class="form-control" type="text" value="{{user1[12]}}">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">expiration date (MM/DD/YYYY)</label>
-                            <input class="form-control" type="date" value="{{user1[14]}}">
-                        </div>
+                                <h3>edit payment info</h3>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">PayPal Email</label>
+                                <input class="form-control" name="paypal_email" type="email" value="{{user1['payment_email']}}">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Zip Code</label>
+                                <input class="form-control" name="postal_code" type="text" value="{{user1['postal_code']}}">
+                            </div>
                         <button class="form-btn" type="submit">save payment info</button>
                     </form>
                 </div>
