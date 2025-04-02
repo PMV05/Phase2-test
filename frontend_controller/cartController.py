@@ -9,11 +9,12 @@ def getCart():
     return getCartModel()
 
 
-def addCartController(p_id, name, image, price, stock, quantity, total):
+def addCartController(p_id, name, image, price, stock, quantity, total, desc, brand, connectivity, earplacement):
     # Receive the variables that we got from POST originally and save in a dictItem to add to session cart
     # The add happens over at the cartModel
     dictitems = {p_id: {'name': name, 'image': image, 'price': price, 'quantity': quantity,
-                        'total_price': total, 'stock': stock}}
+                        'total_price': total, 'stock': stock, 'desc': desc, 'brand':brand, 'connectivity':connectivity,
+                        'earplacement':earplacement}}
     return addCartModel(dictitems)
 
 

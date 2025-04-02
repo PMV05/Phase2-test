@@ -185,18 +185,18 @@
                                                                     </h3>
                                                                     <div class="view-meta">
                                                                         <p>Brand:<span>{{ item['brand'] }}</span></p><br>
-                                                                        <p>Wi-fi: {{ item['wifi'] }}</p><br>
-                                                                        <p>Video Res: ${{ item['videores'] }}</p>
+                                                                        <p>Connectivity: <span>{{ item['connectivity'] }} </span></p><br>
+                                                                        <p>Placement: ${{ item['earplacement'] }}</p>
                                                                     </div>
                                                                     <h3 class="view-price">
-                                                                        <span>${{ item['price'] }}0</span>
+                                                                        <span>${{ item['price'] }}</span>
                                                                     </h3>
                                                                     <p class="view-desc">
-                                                                        Lorem ipsum dolor sit amet consectetur adipisicing elit non tempora magni repudiandae sint suscipit tempore quis maxime explicabo veniam eos reprehenderit fuga
+                                                                        <span>{{item['desc']}}</span>
                                                                     </p>
                                                                     <div class="view-add-group">
                                                                         <!-- This button now submits the form for a manual update -->
-                                                                        <button type="submit" name="action" value="update" class="product-add" title="Update Cart">
+                                                                        <button type="button" name="action" value="update" class="product-add" title="Update Cart">
                                                                             <span>Tap to change amount</span>
                                                                         </button>
                                                                         <div class="product-action">
@@ -221,7 +221,6 @@
                                                                 </div>
                                                             </div>
                                                         </form>
-                                                        
                                                     </div>
                                                 </div>
                                             </div>

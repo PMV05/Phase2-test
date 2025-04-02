@@ -365,10 +365,14 @@ def addcart():
     price = request.form.get('price')
     quantity = request.form.get('quantity')
     stock = request.form.get('stock')
+    desc = request.form.get('desc')
+    brand = request.form.get('brand')
+    connectivity=request.form.get('connectivity')
+    earplacement=request.form.get('earplacement')
 
     total = float(price) * int(quantity)
     # Find the add cart function in cartController
-    addCartController(p_id, name, image, price, stock, quantity, total)
+    addCartController(p_id, name, image, price, stock, quantity, total,desc, brand, connectivity,earplacement)
     # request.referrer means you will be redirected to the current page you were in
     return redirect("/shop")
 
@@ -428,19 +432,19 @@ def delete_cart_item(product_id):
 
 @app.route('/edit-checkout-item/<int:product_id>', methods=['POST'])
 def edit_checkout_item(product_id):
-    """ Updates the quantity of a specific item in the session cart """
-    new_quantity = int(request.form.get('quantity', 1))  # Get new quantity
-
-    if 'cart' in session and str(product_id) in session['cart']:
-        if new_quantity > 0:
-            session['cart'][str(product_id)]['quantity'] = new_quantity
-            session['cart'][str(product_id)]['total_price'] = new_quantity * session['cart'][str(product_id)]['price']
+    update_quantity = int(request.form.get('quantity'))
+    key = str(product_id)
+    
+    if 'cart' in session and key in session['cart']:
+        if update_quantity > 0:
+            session['cart'][key]['quantity'] = update_quantity
+            # Update the total price by converting price to a float
+            session['cart'][key]['total_price'] = update_quantity * float(session['cart'][key]['price'])
         else:
-            session['cart'].pop(str(product_id))  # Remove if quantity is 0
-
-        session.modified = True  # Ensure session updates
-
-    return redirect(url_for('checkout')) 
+            session['cart'].pop(key)
+        session.modified = True
+    
+    return redirect(url_for('checkout'))
 
 
 @app.route("/checkout")
@@ -451,7 +455,7 @@ def checkout():
         # Imprimir para depurar el valor de user TODO: VERIFICAR!!!
         print(user)  # Añadir esta línea para verificar la estructura de user  TODO: VERIFICAR!!!
         
-        total = 0
+        total = 0.0
         
         # Asegurarse de que user tiene al menos 11 elementos (índice 10) 
         if len(user) > 10:
@@ -463,17 +467,16 @@ def checkout():
             )
         else:
             num = "Número no disponible"
-
+    
         # Calcular el total del carrito
         for key, item in session['cart'].items():
-            total += item['total_price']
+            total += float(item['total_price'])
         
         return render_template("checkout.html", user1=user, num=num, total=total)
 
     else:
         session['checkout'] = True
         return redirect("/wrong")
-
 
 
 @app.route("/invoice")

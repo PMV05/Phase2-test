@@ -29,7 +29,7 @@ def addCartModel(dictitems):
                     check = "true"
                     if int(item1['quantity']) + int(item2['quantity']) <= int(item1['stock']):
                         item1['quantity'] = int(item1['quantity']) + int(item2['quantity'])
-                        item1['total_price'] += item2['total_price']
+                        item1['total_price'] += float(item2['total_price'] )
                     else:
                         print("EXCEEDING PRODUCT STOCK")
                         item1['quantity'] = int(item1['stock'])
