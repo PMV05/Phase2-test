@@ -1,8 +1,7 @@
 from frontend_model.invoiceModel import *
 
-def getOrder():
-    return getOrderModel()
+def getOrderInfo(order_id):
+    return getOrderModel(order_id)
 
-
-def getOrderProducts():
-    return getProductsModel()
+def getOrderProducts(order_id):
+    return getProductsModel(order_id)

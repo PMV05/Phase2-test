@@ -37,3 +37,12 @@ def validateUserCheckout():
     
     # Otherwise, proceed to invoice
     return redirect("/invoice")
+
+def editnumbercontroller(number):
+    return editnumbermodel(number)
+
+def editpaymentcontroller(paypal_email):
+    return editpaymentemailmodel(paypal_email)
+
+def editaddresscontroller(street, state, zipcode, city,):
+    return editaddressmodel(street, state, zipcode, city,)

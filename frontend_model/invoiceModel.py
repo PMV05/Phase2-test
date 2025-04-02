@@ -1,7 +1,4 @@
-
-
-#TODO: Hacer las funciones  para eliminar  la simulacion 
-
+from frontend_model.connectDB import Dbconnect
 
 def MagerDicts(dict1, dict2):
     if isinstance(dict1, list) and isinstance(dict2, list):
@@ -10,41 +7,44 @@ def MagerDicts(dict1, dict2):
         return dict(list(dict1.items()) + list(dict2.items()))
     return False
 
-orderDict = {
-    "tracking_num": "71287249",
-    "order_date": "01/17/25",
-    "arrival_date": "01/20/25",
-    "address_line_1": "Vista Rojas Calle 15 L15",
-    "address_line_2": "Arecibo Puerto Rico, 00614",
-    "total": 507.00,
-    "payment_method": "Mastercard"
-}
-
-productDict1 = {"1":{
-    "image": 'imagenes_audifonos/apple/apple_airpods_4.jpg',
-    "name": 'Apple Airpods 4',
-    "brand": 'Apple',
-    "price": 129.00,
-    "quantity": 2,
-    "total_price": 258.00
-}}
-
-productDict2 = {"2":{
-    "image": 'imagenes_audifonos/apple/apple_airpods_max.jpg',
-    "name": 'Apple Airpods Max',
-    "brand": 'Apple',
-    "price": 249.00,
-    "quantity": 1,
-    "total_price": 249.00
-}}
-
-products = productDict1
-products = MagerDicts(products, productDict2)
+def getOrderModel(order_id):
+    db = Dbconnect()
+    query = """
+        SELECT 
+            o.o_tracking_number AS tracking_num,
+            DATE_FORMAT(o.o_order_date, '%%m/%%d/%%y') AS order_date,
+            DATE_FORMAT(o.o_delivery_date, '%%m/%%d/%%y') AS arrival_date,
+            o.o_status,
+            CONCAT(a.ad_street, ', ', a.ad_city) AS address_line_1,
+            CONCAT(a.ad_state, ', ', a.ad_postal_code) AS address_line_2,
+            pm.payment_email AS payment_method,
+            (
+                SELECT SUM(op.op_product_quantity * op.op_product_price)
+                FROM order_product op
+                WHERE op.order_ID = o.order_ID
+            ) AS total
+        FROM `order` o
+        JOIN address a ON o.address_ID = a.address_ID
+        JOIN payment_method pm ON o.payment_method_ID = pm.payment_method_ID
+        WHERE o.order_ID = %s
+    """
+    result = db.select(query, (order_id,))
+    return result[0] if result else {}
 
 
-def getOrderModel():
-    return orderDict
-
-
-def getProductsModel():
-    return products
+def getProductsModel(order_id):
+    db = Dbconnect()
+    query = """
+        SELECT 
+            p.product_ID,
+            p.p_name,
+            p.p_brand,
+            p.p_image,
+            op.op_product_quantity,
+            op.op_product_price,
+            (op.op_product_quantity * op.op_product_price) AS total_price
+        FROM order_product op
+        JOIN product p ON op.op_product_ID = p.product_ID
+        WHERE op.order_ID = %s;
+    """
+    return db.select(query, (order_id,))

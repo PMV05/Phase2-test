@@ -1,5 +1,7 @@
 from functools import wraps # TODO:
 from datetime import datetime
+from frontend_model.checkoutModel import saveOrder
+
 # TODO:
 import pymysql
 from flask import Flask, render_template, redirect, request, session
@@ -257,7 +259,7 @@ def editinfo():
         if  request.form.get('number'):
             number = request.form['number']
             editnumbercontroller(number)
-            return redirect("/profile")
+            return redirect(request.referrer)
 
         elif request.form.get('street') and request.form.get('city') and request.form.get('state') and request.form.get('postal_code'):
             street = request.form['street']
@@ -266,19 +268,19 @@ def editinfo():
             postal_code = request.form['postal_code']
             # address_id = request.form.get('address_id')
             editaddresscontroller(street, city, state, postal_code)
-            return redirect("/profile")
+            return redirect(request.referrer)
 
         elif request.form.get('paypal_email'):
             paypal_email = request.form['paypal_email']
             editpaymentcontroller(paypal_email)
-            return redirect("/profile")
+            return redirect(request.referrer)
 
         elif all(request.form.get(k) for k in ['fname', 'lname', 'email']):
             fname = request.form['fname']
             lname = request.form['lname']
             email = request.form['email']
             editprofilecontroller(fname, lname, email)
-            return redirect("/profile")
+            return redirect(request.referrer)
 
         return redirect(request.referrer)
 
@@ -453,13 +455,16 @@ def checkout():
         total = 0.0
         
         # Asegurarse de que user tiene al menos 11 elementos (índice 10) 
-        if len(user) > 10:
-            # Formatear el número de teléfono si el índice 10 existe
-            num = '{:03d}-{:03d}-{:04d}'.format(
-                int(str(user[10])[:3]),
-                int(str(user[10])[3:6]),
-                int(str(user[10])[6:])
-            )
+        if "phone_number" in user and user["phone_number"]:
+            phone_str = str(user["phone_number"])
+            try:
+                num = '{:03d}-{:03d}-{:04d}'.format(
+                    int(phone_str[:3]),
+                    int(phone_str[3:6]),
+                    int(phone_str[6:10])
+                )
+            except Exception:
+                num = user["phone_number"]
         else:
             num = "Número no disponible"
     
@@ -474,17 +479,72 @@ def checkout():
         return redirect("/wrong")
 
 
+@app.route("/finalize_checkout", methods=["POST"])
+@login_required
+def finalize_checkout():
+    import random
+
+    if 'customer' not in session or 'cart' not in session:
+        return redirect("/shop")
+
+    customer_id = session.get("customer")
+    cart = session.get("cart")
+    total = session.get("total")
+
+    if not customer_id or not cart:
+        return redirect(url_for("checkout"))
+
+    db = Dbconnect()
+    cursor = db.connection.cursor(pymysql.cursors.DictCursor)
+
+    cursor.execute("SELECT address_ID FROM address WHERE customer_ID = %s", (customer_id,))
+    address = cursor.fetchone()
+    cursor.execute("SELECT payment_method_ID FROM payment_method WHERE customer_ID = %s", (customer_id,))
+    payment = cursor.fetchone()
+
+    if not address or not payment:
+        return redirect(url_for("checkout"))
+
+    address_id = address['address_ID']
+    payment_id = payment['payment_method_ID']
+
+    tracking_number = random.randint(10000000, 99999999)
+
+    cursor.execute("""
+        INSERT INTO `order` (o_tracking_number, o_order_date, o_delivery_date, o_status, customer_ID, address_ID, payment_method_ID)
+        VALUES (%s, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 3 DAY), 'in progress', %s, %s, %s)
+    """, (tracking_number, customer_id, address_id, payment_id))
+    db.connection.commit()
+    order_id = cursor.lastrowid
+
+    for key, item in cart.items():
+        cursor.execute("""
+            INSERT INTO order_product (order_ID, op_product_ID, op_product_quantity, op_product_price)
+            VALUES (%s, %s, %s, %s)
+        """, (order_id, key, item['quantity'], item['price']))
+
+    db.connection.commit()
+    cursor.close()
+
+    session['last_order_id'] = order_id
+    session['cart'] = {}
+    session['amount'] = 0
+    session['total'] = 0
+    session.modified = True
+
+    return redirect(url_for("invoice"))
+
 @app.route("/invoice")
+@login_required
 def invoice():
-    # TODO: TO BE CONNECTED TO MYSQL BY STUDENTS
-    # > invoiceController
-    order = getOrder()
-    products = getOrderProducts()
-    # Total amount of items in this simulated order:
-    amount = 3
+    from frontend_controller.invoiceController import getOrderInfo, getOrderProducts
+    order_id = session.get("last_order_id")
+    if not order_id:
+        return redirect(url_for("shop"))
+    order = getOrderInfo(order_id)
+    products = getOrderProducts(order_id)
+    amount = len(products)
     return render_template("invoice.html", order=order, products=products, amount=amount)
-
-
 # @app.route("/filter")
 # def filter():
 #     # filter happens here

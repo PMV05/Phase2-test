@@ -292,7 +292,7 @@
                                 <div class="row">
                                     <div class="col-md-6 col-lg-4 alert fade show">
                                         <div class="payment-card payment active">
-                                            <h5>{{user1['payment_email']}}</h5>
+                                            <h5>{{ user1.payment_email }}</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -301,54 +301,57 @@
                     </div>
         
                     <!-- contact add form -->
-        <div class="modal fade" id="contact-add">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
-                    <form class="modal-form">
-                        <div class="form-title">
-                            <h3>Edit contact number</h3>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">number</label>
-                            <input class="form-control" type="number" value="{{user1[10]}}">
-                        </div>
-                        <button class="form-btn" type="submit">save contact number</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+                    <div class="modal fade" id="contact-add">
+                        <div class="modal-dialog modal-dialog-centered"> 
+                            <div class="modal-content">
+                                <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
+                                <form class="modal-form" action="{{url_for('editinfo')}}" method="post">
+                                    <div class="form-title">
+                                        <h3>Edit contact number</h3>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">number</label>
+                                        <input class="form-control" name="number" type="number" placeholder ="{{user1['phone_number']}}">
+                                        
+                                    </div>
+                                    <button class="form-btn" type="submit">save contact number</button>
+                                    <input type="hidden" name="page" value="/checkout">
+                                </form>
+                            </div> 
+                        </div> 
+                    </div>
         
         <!-- address add form -->
         <div class="modal fade" id="address-add">
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog modal-dialog-centered"> 
                 <div class="modal-content">
                     <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
-                    <form class="modal-form">
+                    <form class="modal-form" action="{{url_for('editinfo')}}" method="post">
                         <div class="form-title">
                             <h3>edit address info</h3>
                         </div>
-        
+
                         <div class="form-group">
-                            <label class="form-label">Address Line 1</label>
-                            <input type="text" class="form-control" value="{{user1[3]}}"></input>
+                            <label class="form-label">Street</label>
+                            <input type="text" name="street" class="form-control" placeholder="{{user1['street']}}"></input>
                         </div>
                         <div class="form-group">
                             <label class="form-label">City</label>
-                            <input type="text" class="form-control" value="{{user1[5]}}"></input>
+                            <input type="text" name="city" class="form-control" placeholder="{{user1['city']}}"></input>
                         </div>
                         <div class="form-group">
                             <label class="form-label">State</label>
-                            <input type="text" class="form-control" value="{{user1[6]}}"></input>
+                            <input type="text" name="state" class="form-control" placeholder="{{user1['state']}}"></input>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Postal code</label>
-                            <input type="text" class="form-control" value="{{user1[7]}}"></input>
+                            <input type="text" name="postal_code" class="form-control" placeholder="{{user1['postal_code']}}"></input>
                         </div>
-                        <button class="form-btn" type="submit">save address info</button>
+                        <button class="form-btn" type="submit">Save address info</button>
+                        <input type="hidden" name="page" value="/checkout">
                     </form>
-                </div>
-            </div>
+                </div> 
+            </div> 
         </div>
         
         <!-- payment add form -->
@@ -362,7 +365,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">PayPal Email</label>
-                                <input class="form-control" name="paypal_email" type="email" value="{{user1['payment_email']}}">
+                                <input class="form-control" name="paypal_email" type="email" value="{{user1.payment_email}}">
                             </div>
                             
                             <div class="form-group">
@@ -370,15 +373,19 @@
                                 <input class="form-control" name="postal_code" type="text" value="{{user1['postal_code']}}">
                             </div>
                         <button class="form-btn" type="submit">save payment info</button>
+                        <input type="hidden" name="page" value="/checkout">
                     </form>
                 </div>
             </div>
         </div>
         
         
-                            <div class="checkout-proced">
-                                <a href="{{url_for('invoice')}}" class="btn btn-inline">proceed to checkout</a>
-                            </div>
+        <div class="checkout-proced">
+            <form action="{{ url_for('finalize_checkout') }}" method="POST">
+                <button type="submit" class="btn btn-inline">proceed to checkout</button>
+            </form>
+        </div>
+        
                         </div>
                     </div>
                 </div>
