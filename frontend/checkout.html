@@ -149,7 +149,7 @@
                                                 <td class="table-name"><h6>{{item['name']}}</h6></td>
                                                 <td class="table-price"><h6>${{item['price']}}0</h6></td>
                                                 <td class="table-brand"><h6>{{item['quantity']}}</h6></td>
-                                                 <td class="table-brand"><h6>${{item['total_price']}}0</h6></td>
+                                                 <td class="table-brand"><h6>${{'%.2f'|format(item['total_price'])}}0</h6></td>
                                                 <td class="table-action">
                                                     <a class="view" href="#" title="Edit Amount" data-bs-toggle="modal" data-bs-target="#product-view-{{key}}"><i class="fas fa-edit"></i></a>
                                                     <form action="{{ url_for('delete_cart_item', product_id=key) }}" method="POST">
@@ -189,7 +189,7 @@
                                                                         <p>Placement: ${{ item['earplacement'] }}</p>
                                                                     </div>
                                                                     <h3 class="view-price">
-                                                                        <span>${{ item['price'] }}</span>
+                                                                        <span>${{ '%.2f'|format(item['price']) }}</span>
                                                                     </h3>
                                                                     <p class="view-desc">
                                                                         <span>{{item['desc']}}</span>
@@ -238,7 +238,7 @@
                                     <ul>
                                         <li>
                                             <span>Total</span>
-                                            <span>${{total}}0</span>
+                                            <span>${{'%.2f'|format(total)}}0</span>
                                         </li>
                                     </ul>
                                 </div>
