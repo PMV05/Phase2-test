@@ -209,21 +209,16 @@ def profile():
         c.c_last_name AS last_name, 
         c.c_email AS email, 
         c.c_phone_number,
+        c.c_payment_email,
+        c.c_payment_postal_code,
         a.ad_street AS street,
         a.ad_city AS city,
         a.ad_state AS state,
-        a.ad_postal_code AS postal_code,
-        pm.payment_email
+        a.ad_postal_code AS postal_code
     FROM customer c
     LEFT JOIN address a ON c.customer_ID = a.customer_ID
-    LEFT JOIN payment_method pm ON c.customer_ID = pm.customer_ID
     WHERE c.customer_ID = %s
-"""
-
-
-
-
-    print("CUSTOMER ID:", session.get('customer'))
+    """
 
     cursor.execute(query, (session['customer'],))
     user = cursor.fetchone()
@@ -232,7 +227,6 @@ def profile():
         return render_template("profile.html", user=[], num="No disponible")
 
     return render_template("profile.html", user=[user], num=user['c_phone_number'])
-
 # TODO:
 @app.route("/addinfo", methods=["POST"])
 def addinfo():
@@ -266,9 +260,17 @@ def editinfo():
             city = request.form['city']
             state = request.form['state']
             postal_code = request.form['postal_code']
-            # address_id = request.form.get('address_id')
-            editaddresscontroller(street, city, state, postal_code)
+
+            from frontend_model.profileModel import getAddressModel
+            address = getAddressModel(session['customer'])
+
+            if address:  # Si ya existe, edita
+                editaddresscontroller(street, city, state, postal_code)
+            else:  # Si no existe, añade
+                addaddresscontroller(street, state, postal_code, city)
+
             return redirect(request.referrer)
+
 
         elif request.form.get('paypal_email'):
             paypal_email = request.form['paypal_email']
@@ -451,8 +453,8 @@ def checkout():
     if 'customer' in session:
         user = getUserCheckout()
         
-        # Imprimir para depurar el valor de user TODO: VERIFICAR!!!
-        print(user)  # Añadir esta línea para verificar la estructura de user  TODO: VERIFICAR!!!
+       
+        print(user) 
         
         total = 0.0
         

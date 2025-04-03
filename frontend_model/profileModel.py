@@ -1,22 +1,17 @@
 import pymysql
 from flask import session
-from frontend_model.connectDB import *
+from frontend_model.connectDB import Dbconnect
 from passlib.handlers.sha2_crypt import sha256_crypt
-import re
-from datetime import datetime
-
-
-#TODO:
 
 def getUserModel():
     db = Dbconnect()
     query = '''
-        SELECT c.customer_ID, c.c_first_name, c.c_last_name, c.c_email,c.c_password, c.c_phone_number, c.c_status,
-            a.ad_street, a.ad_city, a.ad_state, a.ad_postal_code,
-            pm.payment_email
+        SELECT c.customer_ID, c.c_first_name, c.c_last_name, c.c_email, c.c_password,
+               c.c_phone_number, c.c_status,
+               c.c_payment_email, c.c_payment_postal_code,
+               a.ad_street, a.ad_city, a.ad_state, a.ad_postal_code
         FROM customer c
-        JOIN address a ON c.customer_ID = a.customer_ID
-        JOIN payment_method pm ON c.customer_ID = pm.customer_ID
+        LEFT JOIN address a ON c.customer_ID = a.customer_ID
         WHERE c.customer_ID = %s AND c.c_status = 'active'
     '''
     try:
@@ -35,7 +30,8 @@ def getUserModel():
                 "city": u['ad_city'],
                 "state": u['ad_state'],
                 "postal_code": u['ad_postal_code'],
-                "payment_email": u['payment_email']
+                "c_payment_email": u['c_payment_email'],
+                "c_payment_postal_code": u['c_payment_postal_code'],
             })
         return user
     except pymysql.Error as error:
@@ -54,34 +50,27 @@ def editnumbermodel(number):
 
 def addaddressmodel(street, state, postal_code, city):
     db = Dbconnect()
-    query = ("INSERT INTO address (address_ID, ad_street, ad_city, ad_state, ad_postal_code)"
-            " VALUES(%s, %s, %s, %s, %s)")
+    query_check = "SELECT * FROM address WHERE customer_ID = %s"
+    address_exists = db.select(query_check, (session['customer'],))
+    if address_exists:
+        return editaddressmodel(street,  city, state, postal_code)
+
+    query = ("INSERT INTO address (customer_ID, ad_street, ad_city, ad_state, ad_postal_code) "
+             "VALUES (%s, %s, %s, %s, %s)")
     try:
         db.execute(query, (session['customer'], street, city, state, postal_code))
         return 0
     except pymysql.Error as error:
         print(error)
         return 1
-    
-    
-def addpaymentmodel(payment_email, payment_postal_code, customer_ID):
-    db = Dbconnect()
-    
 
+def editaddressmodel(street,city, state, postal_code):
+    db = Dbconnect()
     query = """
-        INSERT INTO payment_method (payment_email, payment_postal_code, customer_ID)
-        VALUES (%s, %s, %s)
-    """
-    values = (payment_email, payment_postal_code, customer_ID)
-    db.execute(query, values)
-
-    db.close()
-
-
-def editaddressmodel(street, state, postal_code, city):
-    db = Dbconnect()
-    query = ("UPDATE address SET ad_street = %s, ad_city = %s, "
-            "ad_state = %s, ad_postal_code = %s WHERE customer_ID = %s")
+            UPDATE address 
+                SET ad_street = %s, ad_city = %s, ad_state = %s, ad_postal_code = %s 
+                WHERE customer_ID = %s
+"""
     try:
         db.execute(query, (street, city, state, postal_code, session['customer']))
         return 0
@@ -89,18 +78,23 @@ def editaddressmodel(street, state, postal_code, city):
         print(error)
         return 1
 
-def getpaymentmodel(customer):
+def addpaymentmodel(payment_email, payment_postal_code, customer_ID):
     db = Dbconnect()
-    query = "SELECT * FROM payment_method WHERE customer_id = %s"
     try:
-        return db.select(query, (customer,))
+        check = db.select("SELECT c_payment_email FROM customer WHERE customer_ID = %s", (customer_ID,))
+        if check and check[0]['c_payment_email']:
+            return editpaymentemailmodel(payment_email, payment_postal_code)
+        query = "UPDATE customer SET c_payment_email = %s, c_payment_postal_code = %s WHERE customer_ID = %s"
+        db.execute(query, (payment_email, payment_postal_code, customer_ID))
+        return 0
     except pymysql.Error as error:
         print(error)
-        return []
+        return 1
+
 
 def editpaymentemailmodel(email, postal_code):
     db = Dbconnect()
-    query = "UPDATE payment_method SET payment_email = %s, payment_postal_code = %s WHERE customer_ID = %s"
+    query = "UPDATE customer SET c_payment_email = %s, c_payment_postal_code = %s WHERE customer_ID = %s"
     try:
         db.execute(query, (email, postal_code, session['customer']))
         return 0
@@ -121,7 +115,7 @@ def editprofilemodel(fname, lname, email):
 
 def getAddressModel(customer):
     db = Dbconnect()
-    sql = "SELECT * FROM address WHERE address_ID = %s"
+    sql = "SELECT * FROM address WHERE customer_ID = %s"
     try:
         return db.select(sql, (customer,))
     except pymysql.Error as error:
@@ -129,18 +123,12 @@ def getAddressModel(customer):
         return []
 
 def changepassmodel(email , newPass):
-        # Connect to MySQL database server using credentials provided
     db = Dbconnect()
-
-    # Encrypt the password using the sha256_crypt function
     hashed_new_pass = sha256_crypt.encrypt(newPass)
-
     try:
-        # Once encrypted, save this new hashed password to DB
         query2 = "UPDATE customer SET c_password = %s WHERE c_email  = %s"
         db.execute(query2, (hashed_new_pass, email))
         return 1
-
     except pymysql.Error as error:
         print(error)
         return 0

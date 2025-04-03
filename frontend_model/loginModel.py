@@ -32,6 +32,6 @@ def registermodel(fname, lname, email, password):
 
     hash_password = sha256_crypt.encrypt(password)
     
-    db.execute(sql, (fname, lname, email, hash_password, status))
+    db.execute(sql, (fname, lname, email, password, status))
 
     return True
