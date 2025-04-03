@@ -5702,6 +5702,7 @@ tbody tr td:last-child {
   -ms-transition: all linear .3s;
   -o-transition: all linear .3s;
 }
+
 .view-action-group a span {
   font-size: 14px;
   font-weight: 500;
