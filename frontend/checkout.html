@@ -179,16 +179,17 @@
                                                         </div>
                                                         <form method="POST" action="{{ url_for('edit_checkout_item', product_id=key)}}" style="text-align: center;">
                                                             <div class="col-md-6 col-lg-6">
+                                                                <form method="POST" action="{{ url_for('edit_checkout_item', product_id=key)}}"></form>
                                                                 <div class="view-details">
                                                                     <h3 class="view-name">
                                                                         <a href="product-video.html">{{ item['name'] }}</a>
                                                                     </h3>
                                                                     <div class="view-meta">
                                                                         <p>Brand:<span>{{ item['brand'] }}</span></p><br>
-                                                                        <p>Connectivity: <span>{{ item['connectivity'] }} </span></p><br>
-                                                                        <p>Placement: ${{ item['earplacement'] }}</p>
+                                                                        <p>Placement: {{ item['earplacement'] }}</p>
                                                                     </div>
                                                                     <h3 class="view-price">
+                                                                        <span>${{item['price'] }}</span>
                                                                         <span>${{item['price'] }}</span>
                                                                     </h3>
                                                                     <p class="view-desc">
@@ -219,8 +220,8 @@
                                                                         </a>
                                                                     </div>
                                                                 </div>
+                                                                </form>
                                                             </div>
-                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -238,6 +239,7 @@
                                     <ul>
                                         <li>
                                             <span>Total</span>
+                                            <span>${{'%.2f'|format(total)}}</span>
                                             <span>${{'%.2f'|format(total)}}</span>
                                         </li>
                                     </ul>
