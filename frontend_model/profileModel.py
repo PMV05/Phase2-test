@@ -4,6 +4,8 @@ from frontend_model.connectDB import Dbconnect
 from passlib.handlers.sha2_crypt import sha256_crypt
 
 def getUserModel():
+    # Se crea una instancia para conectar con la base de datos, en el query
+    # se seleccionan toda la informacion relacionada al usuario
     db = Dbconnect()
     query = '''
         SELECT c.customer_ID, c.c_first_name, c.c_last_name, c.c_email, c.c_password,
@@ -39,6 +41,9 @@ def getUserModel():
         return []
 
 def editnumbermodel(number):
+    # Se crea una instancia para conectar con la base de datos, en el query se
+    # actualiza el numero de telefono segun el id del usuario que haya 
+    # iniciado sesion
     db = Dbconnect()
     query = "UPDATE customer SET c_phone_number = %s WHERE customer_ID = %s"
     try:
@@ -49,6 +54,8 @@ def editnumbermodel(number):
         return 1
 
 def addaddressmodel(street, state, postal_code, city):
+    # Se crea una instancia para conectar con la base de datos, en el query se 
+    # inserta la direccion del usuario que inicio sesion
     db = Dbconnect()
     query_check = "SELECT * FROM address WHERE customer_ID = %s"
     address_exists = db.select(query_check, (session['customer'],))
@@ -65,6 +72,8 @@ def addaddressmodel(street, state, postal_code, city):
         return 1
 
 def editaddressmodel(street,city, state, postal_code):
+    # Se crea una instancia para conectar con la base de datos, en el query
+    # se actualiza la direccion del usuario
     db = Dbconnect()
     query = """
             UPDATE address 
@@ -79,6 +88,8 @@ def editaddressmodel(street,city, state, postal_code):
         return 1
 
 def addpaymentmodel(payment_email, payment_postal_code, customer_ID):
+    # Se crea la instancia para conectar con la base de datos, en el query se 
+    # selecciona el metodo de pago del usuario que inicio sesion
     db = Dbconnect()
     try:
         check = db.select("SELECT c_payment_email FROM customer WHERE customer_ID = %s", (customer_ID,))
@@ -93,6 +104,8 @@ def addpaymentmodel(payment_email, payment_postal_code, customer_ID):
 
 
 def editpaymentemailmodel(email, postal_code):
+    # Se crea una instancia para conectar con la base de datos, en el query
+    # se actualiza el metodo de pago del cliente
     db = Dbconnect()
     query = "UPDATE customer SET c_payment_email = %s, c_payment_postal_code = %s WHERE customer_ID = %s"
     try:
@@ -104,6 +117,8 @@ def editpaymentemailmodel(email, postal_code):
 
 
 def editprofilemodel(fname, lname, email):
+    # Se crea una instancia para conectar con la base de dato, en el query
+    # se actualiza el nombre y email del usuario
     db = Dbconnect()
     query = "UPDATE customer SET c_first_name = %s, c_last_name = %s, c_email = %s WHERE customer_ID = %s"
     try:
@@ -114,6 +129,8 @@ def editprofilemodel(fname, lname, email):
         return 1
 
 def getAddressModel(customer):
+    # Se crea una instancia para conectar con la base de dato, en el query
+    # se selecciona la direccion del usuario
     db = Dbconnect()
     sql = "SELECT * FROM address WHERE customer_ID = %s"
     try:
@@ -126,6 +143,8 @@ def changepassmodel(email , newPass):
     db = Dbconnect()
     hashed_new_pass = sha256_crypt.encrypt(newPass)
     try:
+        # Se crea una instancia para conectar con la base de dato, en el query
+        # se actualiza el la contraseña del usuario
         query2 = "UPDATE customer SET c_password = %s WHERE c_email  = %s"
         db.execute(query2, (hashed_new_pass, email))
         return 1

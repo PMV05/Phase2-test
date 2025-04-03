@@ -7,6 +7,12 @@ def MagerDicts(dict1, dict2):
         return dict(list(dict1.items()) + list(dict2.items()))
     return False
 
+
+# Definimos una funcion getOrderModel que tomara el order_id
+# Se crea una conexion con la base de datos
+# En este campo una vez hagamos todo el proceso del checkout nos brindara una tabla con toda la informacion importante de neustro pedido.
+# Ejecutamos con order_id como parametro y almacenamos el resultado.
+# Si hay resultados, se devuelve el primer resultado, si no, se devuelve vacio.
 def getOrderModel(order_id):
     db = Dbconnect()
     query = """
@@ -31,6 +37,10 @@ def getOrderModel(order_id):
     result = db.select(query, (order_id,))
     return result[0] if result else {}
 
+
+# Definimos una funcion getOrderModel que tomara el order id.
+# Se crea una conexion con la base de datos.
+# Obtenenos los porductos comprados en un pedido.
 def getProductsModel(order_id):
     db = Dbconnect()
     query = """

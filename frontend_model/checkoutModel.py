@@ -6,8 +6,11 @@ from frontend_model.connectDB import Dbconnect
 def validateUserModel():
     user = []
     db = Dbconnect()
+    #query que selecciona todas las columnas atdas a customer ID
     query = "SELECT * from customer WHERE c_id = %s"
+    #realiza el query utilizando el ID que esta siendo utilizado
     userFound = db.select(query, (session['customer'],))
+    #le anade a un diccionario cada atributo recibido
     for users in userFound:
         user.append({
             "id": users['customer_ID'],
@@ -23,6 +26,7 @@ def validateUserModel():
 
 def getUserCheckout():
     db = Dbconnect()
+    #query que une las tablas de address y payment, junto a customer, y selecciona los datos personales y el address del payment 
     query = """
         SELECT c.customer_ID, c.c_first_name, c.c_last_name, c.c_email, c.c_phone_number,
             a.ad_street, a.ad_city, a.ad_state, a.ad_postal_code,
@@ -55,7 +59,7 @@ def getUserCheckout():
 
 
 
-
+#query que hace update a la tabla de customer, al atributo de phone_number
 def editnumbermodel(number):
     db = Dbconnect()
     query = "UPDATE customer SET c_phone_number = %s WHERE customer_ID = %s"
@@ -68,6 +72,7 @@ def editnumbermodel(number):
 
 
 def editpaymentemailmodel(email, postal_code):
+    #query que hace update a la tabla de customer, al atributo de payment_email
     db = Dbconnect()
     query = "UPDATE customer SET c_payment_email = %s, c_payment_postal_code = %s WHERE customer_ID = %s"
     try:
@@ -81,6 +86,7 @@ def editpaymentemailmodel(email, postal_code):
 
 
 def editaddressmodel(street, state, postal_code, city):
+    #query que hace update a la tabla de customer, al atributo de direccion
     db = Dbconnect()
     query = ("UPDATE address SET ad_street = %s, ad_city = %s, "
              "ad_state = %s, ad_postal_code = %s WHERE customer_ID = %s")
@@ -107,7 +113,7 @@ def saveOrder(customer_id, cart, total):
     # Generar número de tracking numérico de 8 dígitos
     import random
     tracking_num = str(random.randint(10000000, 99999999))
-
+    #query que insert una nueva orden, con tracking number, fecha actual, entrega,status, c_id y addressID
     # Insertar orden
     cursor.execute("""
         INSERT INTO `order` (
@@ -120,6 +126,7 @@ def saveOrder(customer_id, cart, total):
     order_id = cursor.lastrowid
 
     for key, item in cart.items():
+        #inserta cada producto del cart a la table de order_product con sus atributos como precio, cantidad, y product_ID
         cursor.execute("""
             INSERT INTO order_product (order_ID, op_product_ID, op_product_quantity, op_product_price)
             VALUES (%s, %s, %s, %s)

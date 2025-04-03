@@ -119,11 +119,15 @@ def shop():
     # First we receive the list of products by accessing getProducts() from shopController
     products = getProducts()
 
+    # Se crea una instancia para conectar con la base de datos y poder crear un query, 
+    # El query creado extrae todos los productos activos en la base de datos
     db = Dbconnect()
     params = []
     query = "SELECT * FROM product WHERE p_status = 'active' "
 
     # Filtro para la búsqueda por nombre
+    # Si el filtro está activado, se concatena el predicado al query antes creado
+    # para buscar todos los productos segun el nombre entrado
     searchQuery = request.args.get('search')
     if searchQuery:
         query += " AND (LOWER(p_name) LIKE %s OR LOWER(p_brand) LIKE %s) "
@@ -131,6 +135,8 @@ def shop():
         params.append(f"%{searchQuery.lower()}%")
 
     # Filtro para la marca
+    # Si el filtro está activado, se concatena el predicato al query antes creado
+    # donde buscara todos los productos que cumpla con las marcas selecciondas
     brandsSelected = request.args.getlist('brands')
     if(brandsSelected):
         numberBrands = ', '.join(['%s'] * len(brandsSelected)) 
@@ -138,6 +144,8 @@ def shop():
         params.extend(brandsSelected)
 
     # Filtro para el color
+    # Si el filtro esta activado, se concatena el predicado al query antes creado 
+    # donde buscara todos los productos que cumplan con los colores seleccionados
     colorsSelected = request.args.getlist('color-types')
     if(request.args.getlist('color-types')):
         numberColors = ', '.join(['%s'] * len(colorsSelected)) 
@@ -145,6 +153,8 @@ def shop():
         params.extend(colorsSelected)
 
     # Filtro para el tipo de modelo
+    # Si el filtro esta activado, se concatena el predicado al query antes creado
+    # donde buscara todos los productos que cumplan con los modelos seleccionados
     modelsSelected = request.args.getlist('modelType')
     if(request.args.getlist('modelType')):
         numberModels = ', '.join(['%s'] * len(modelsSelected)) 
@@ -152,6 +162,8 @@ def shop():
         params.extend(modelsSelected)
 
     # Filtro para la conecetividad
+    # Si el filtro esta activado, se concatena el predicado al query antes creado 
+    # donde buscara todos los productos que cumplan con la conectividad seleccionada
     connectivitySelected = request.args.getlist('connectivity')
     if(request.args.getlist('connectivity')):
         numberConnectivity = ', '.join(['%s'] * len(connectivitySelected)) 
@@ -159,6 +171,8 @@ def shop():
         params.extend(connectivitySelected)
 
     # Filtro para el ajuste de oreja
+    # Si el filtro esta activado, se concatena el predicado al query antes creado 
+    # donde buscara todos los productos que cumplan con el ajuste de oreja seleccionado
     placementSelected = request.args.getlist('earPlacement')
     if(request.args.getlist('earPlacement')):
         numberPlacement = ', '.join(['%s'] * len(placementSelected)) 
@@ -166,9 +180,13 @@ def shop():
         params.extend(placementSelected)
 
     # Filtro para el orden ascendente
+    # Si el filtro esta activado, se concatena el predicado al query antes creado 
+    # donde buscara todos los productos que cumplan con el ajuste de orejas seleccionado
     sortingSelected = request.args.getlist('sortings')
     orderSelected = request.args.get('sort-order')
-
+    # Filtro para ordenar de forma ascendente o descendente 
+    # Si el filtro esta activo, se concatena el predicado al query antes creado
+    # donde ordenara todo los productos segun el orden seleccionado
     if(sortingSelected and orderSelected):
         query += f" order By {', '.join(sortingSelected)} "
         if(orderSelected == 'descending'):   
@@ -200,6 +218,9 @@ def profile():
     if 'customer' not in session:
         return redirect(url_for('enterpage', message='enter'))
 
+    # Obtiene toda la informacion del usuario
+    # Se crea una instancia para conectar con la base de datos, donde el 
+    # query selecciona toda la informacion relacionada al usuario 
     db = Dbconnect()
     cursor = db.connection.cursor(pymysql.cursors.DictCursor)
 
@@ -336,6 +357,7 @@ def resetpassword():
     db = Dbconnect()
     
     # Verificar si el email existe
+    # Selecciona la tupla completa, segun el email del usuario
     result = db.select("SELECT * FROM customer WHERE c_email = %s", (email,))
     if not result:
         return render_template('reset-password.html', message="Email not found.")
@@ -344,6 +366,7 @@ def resetpassword():
     hashed_pass = sha256_crypt.encrypt(newpass1)
 
     # Actualizar en la base de datos
+    # Actualiza la contraseña segun el email del usuario
     db.execute("UPDATE customer SET c_password = %s WHERE c_email = %s", (hashed_pass, email))
 
     return redirect("/enter")
@@ -458,7 +481,7 @@ def checkout():
         
         total = 0.0
         
-        # Asegurarse de que user tiene al menos 11 elementos (índice 10) 
+        
         if "phone_number" in user and user["phone_number"]:
             phone_str = str(user["phone_number"])
             try:

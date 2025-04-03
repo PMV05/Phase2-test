@@ -2,6 +2,15 @@ import pymysql
 from frontend_model.connectDB import *
 from datetime import datetime
 
+
+# Se crea una instancia para la conceccion de la base de datos.
+# Obtiene la consulta del SQL que obtiene las ordenes de los clientes.
+# Se ejecuta la consulta SQL, pasando el customer_id como parámetro en la consulta.
+# Obtenemos todos los resultados de la consulta.
+# Se cierra el cursor después de ejecutar la consulta para liberar recursos.
+# Devuelve los resultados obtenidos de las ordenes. 
+
+
 def get_user_orders(customer_id):
     db = Dbconnect()
     cursor = db.connection.cursor(pymysql.cursors.DictCursor)
