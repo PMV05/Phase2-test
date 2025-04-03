@@ -5682,7 +5682,11 @@ tbody tr td:last-child {
   font-size: 16px;
   margin-right: 8px;
 }
-.view-action-group button i{
+.view-action-group button i {
+  font-size: 16px;
+  margin-right: 8px;
+}
+.view-action-group button{
   padding: 10px 0px;
   border-radius: 8px;
   color: var(--text);
