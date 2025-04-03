@@ -272,7 +272,9 @@ def editinfo():
 
         elif request.form.get('paypal_email'):
             paypal_email = request.form['paypal_email']
-            editpaymentcontroller(paypal_email)
+            postal_code = request.form.get('paypal_postal_code')
+            editpaymentcontroller(paypal_email, postal_code)
+
             return redirect(request.referrer)
 
         elif all(request.form.get(k) for k in ['fname', 'lname', 'email']):
@@ -482,57 +484,15 @@ def checkout():
 @app.route("/finalize_checkout", methods=["POST"])
 @login_required
 def finalize_checkout():
-    import random
-
-    if 'customer' not in session or 'cart' not in session:
-        return redirect("/shop")
-
-    customer_id = session.get("customer")
-    cart = session.get("cart")
-    total = session.get("total")
-
-    if not customer_id or not cart:
-        return redirect(url_for("checkout"))
-
-    db = Dbconnect()
-    cursor = db.connection.cursor(pymysql.cursors.DictCursor)
-
-    cursor.execute("SELECT address_ID FROM address WHERE customer_ID = %s", (customer_id,))
-    address = cursor.fetchone()
-    cursor.execute("SELECT payment_method_ID FROM payment_method WHERE customer_ID = %s", (customer_id,))
-    payment = cursor.fetchone()
-
-    if not address or not payment:
-        return redirect(url_for("checkout"))
-
-    address_id = address['address_ID']
-    payment_id = payment['payment_method_ID']
-
-    tracking_number = random.randint(10000000, 99999999)
-
-    cursor.execute("""
-        INSERT INTO `order` (o_tracking_number, o_order_date, o_delivery_date, o_status, customer_ID, address_ID, payment_method_ID)
-        VALUES (%s, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 3 DAY), 'in progress', %s, %s, %s)
-    """, (tracking_number, customer_id, address_id, payment_id))
-    db.connection.commit()
-    order_id = cursor.lastrowid
-
-    for key, item in cart.items():
-        cursor.execute("""
-            INSERT INTO order_product (order_ID, op_product_ID, op_product_quantity, op_product_price)
-            VALUES (%s, %s, %s, %s)
-        """, (order_id, key, item['quantity'], item['price']))
-
-    db.connection.commit()
-    cursor.close()
-
-    session['last_order_id'] = order_id
-    session['cart'] = {}
-    session['amount'] = 0
-    session['total'] = 0
-    session.modified = True
-
-    return redirect(url_for("invoice"))
+    order_id = saveOrderWithProducts()
+    if order_id:
+        session['last_order_id'] = order_id
+        session['cart'] = {}
+        session['amount'] = 0
+        session['total'] = 0
+        session.modified = True
+        return redirect(url_for("invoice"))
+    return redirect(url_for("checkout"))
 
 @app.route("/invoice")
 @login_required
@@ -545,6 +505,7 @@ def invoice():
     products = getOrderProducts(order_id)
     amount = len(products)
     return render_template("invoice.html", order=order, products=products, amount=amount)
+
 # @app.route("/filter")
 # def filter():
 #     # filter happens here

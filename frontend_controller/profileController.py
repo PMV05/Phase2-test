@@ -22,8 +22,9 @@ def getpaymentcontroller():
 def addpaymentcontroller(payment_email, payment_postal_code, customer_ID):
     return addpaymentmodel(payment_email, payment_postal_code, customer_ID)
 
-def editpaymentcontroller(paypal_email):
-    return editpaymentemailmodel(paypal_email)
+def editpaymentcontroller(paypal_email, postal_code):
+    from frontend_model.profileModel import editpaymentemailmodel
+    editpaymentemailmodel(paypal_email, postal_code)
 
 def editprofilecontroller(fname, lname, email):
     return editprofilemodel(fname, lname, email)

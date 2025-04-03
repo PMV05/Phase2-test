@@ -17,7 +17,7 @@ def getOrderModel(order_id):
             o.o_status,
             CONCAT(a.ad_street, ', ', a.ad_city) AS address_line_1,
             CONCAT(a.ad_state, ', ', a.ad_postal_code) AS address_line_2,
-            pm.payment_email AS payment_method,
+            c.c_payment_email AS payment_method,
             (
                 SELECT SUM(op.op_product_quantity * op.op_product_price)
                 FROM order_product op
@@ -25,12 +25,11 @@ def getOrderModel(order_id):
             ) AS total
         FROM `order` o
         JOIN address a ON o.address_ID = a.address_ID
-        JOIN payment_method pm ON o.payment_method_ID = pm.payment_method_ID
+        JOIN customer c ON o.customer_ID = c.customer_ID
         WHERE o.order_ID = %s
     """
     result = db.select(query, (order_id,))
     return result[0] if result else {}
-
 
 def getProductsModel(order_id):
     db = Dbconnect()

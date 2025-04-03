@@ -98,15 +98,16 @@ def getpaymentmodel(customer):
         print(error)
         return []
 
-def editpaymentemailmodel(email):
+def editpaymentemailmodel(email, postal_code):
     db = Dbconnect()
-    query = "UPDATE payment_method SET payment_email = %s WHERE customer_ID = %s"
+    query = "UPDATE payment_method SET payment_email = %s, payment_postal_code = %s WHERE customer_ID = %s"
     try:
-        db.execute(query, (email, session['customer']))
+        db.execute(query, (email, postal_code, session['customer']))
         return 0
     except pymysql.Error as error:
         print(error)
         return 1
+
 
 def editprofilemodel(fname, lname, email):
     db = Dbconnect()

@@ -41,8 +41,10 @@ def validateUserCheckout():
 def editnumbercontroller(number):
     return editnumbermodel(number)
 
-def editpaymentcontroller(paypal_email):
-    return editpaymentemailmodel(paypal_email)
+def editpaymentcontroller(paypal_email, postal_code):
+    from frontend_model.profileModel import editpaymentemailmodel
+    editpaymentemailmodel(paypal_email, postal_code)
+
 
 def editaddresscontroller(street, state, zipcode, city,):
     return editaddressmodel(street, state, zipcode, city,)
