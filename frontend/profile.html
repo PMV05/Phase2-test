@@ -184,7 +184,10 @@
                         <div class="row">
                             <div class="col-md-6 col-lg-4 alert fade show">
                                 <div class="payment-card payment active">
-                                    <h5>{{user1['payment_email']}}</h5>
+                                    <h5>{{ user1['c_payment_email'] }}</h5>
+                                    <p>{{ user1['c_payment_postal_code'] }}</p>
+
+
                                 </div>
                             </div>
                         </div>
@@ -237,27 +240,32 @@
             <div class="modal-dialog modal-dialog-centered"> 
                 <div class="modal-content">
                     <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
-                    <form class="modal-form" action="{{url_for('editinfo')}}" method="post">
+                    <form class="modal-form" action="/editinfo" method="post">
                         <div class="form-title">
                             <h3>edit address info</h3>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Street</label>
-                            <input type="text" name="street" class="form-control" placeholder="{{user1['street']}}"></input>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">City</label>
-                            <input type="text" name="city" class="form-control" placeholder="{{user1['city']}}"></input>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">State</label>
-                            <input type="text" name="state" class="form-control" placeholder="{{user1['state']}}"></input>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Postal code</label>
-                            <input type="text" name="postal_code" class="form-control" placeholder="{{user1['postal_code']}}"></input>
-                        </div>
+                        <!-- address edit form -->
+                            <div class="form-group">
+                                <label class="form-label">Street</label>
+                                <input type="text" name="street" class="form-control" value="{{user1['street']}}">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">City</label>
+                                <input type="text" name="city" class="form-control" value="{{user1['city']}}">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">State</label>
+                                <input type="text" name="state" class="form-control" value="{{user1['state']}}">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Postal code</label>
+                                <input type="text" name="postal_code" class="form-control" value="{{user1['postal_code']}}">
+                            </div>
+
+                        
+                        
+                        
                         <button class="form-btn" type="submit">Save address info</button>
                         <input type="hidden" name="page" value="/profile">
                     </form>
@@ -265,31 +273,36 @@
             </div> 
         </div>
 
-        <!-- payment edit form -->
+        <!-- payment add form -->
         <div class="modal fade" id="payment-add">
-            <div class="modal-dialog modal-dialog-centered"> 
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
-                    <form class="modal-form" action="{{url_for('editinfo')}}" method="post">
+                    <form class="modal-form" method="POST" action="/editinfo">
                         <div class="form-title">
-                            <h3>edit payment info</h3>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">PayPal Email</label>
-                            <input class="form-control" name="paypal_email" type="email" placeholder="{{user['payment_email']}}">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Zip Code</label>
-                            <input class="form-control" name="postal_code" type="text" placeholder="{{user1['postal_code']}}">
+                            <h3>Edit Paypal Info</h3>
                         </div>
 
-                        <button class="form-btn" type="submit">save payment info</button>
+                        <!-- PayPal Email -->
+                        <div class="form-group">
+                            <label class="form-label">PayPal Email</label>
+                            <input class="form-control" name="paypal_email" type="email" placeholder="{{ user1['user_payment_email'] }}">
+                        </div>
+
+                        <!-- Postal Code (ZIP) -->
+                        <div class="form-group">
+                            <label class="form-label">Zip Code</label>
+                            <input class="form-control" name="paypal_postal_code" type="text" placeholder="{{ user1['user_payment_postal_code'] }}">
+                        </div>
+
+                        <!-- Submit -->
+                        <button class="form-btn" type="submit">Save Payment Info</button>
                         <input type="hidden" name="page" value="/profile">
                     </form>
-                </div> 
-            </div> 
+                </div>
+            </div>
         </div>
+
 
         <!-- profile edit form -->
         <div class="modal fade" id="profile-edit">

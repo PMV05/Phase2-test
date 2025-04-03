@@ -24,12 +24,11 @@ def validateUserModel():
 def getUserCheckout():
     db = Dbconnect()
     query = """
-         SELECT c.customer_ID, c.c_first_name, c.c_last_name, c.c_email, c.c_phone_number,
-               a.ad_street, a.ad_city, a.ad_state, a.ad_postal_code,
-               pm.payment_email, pm.payment_postal_code
+        SELECT c.customer_ID, c.c_first_name, c.c_last_name, c.c_email, c.c_phone_number,
+            a.ad_street, a.ad_city, a.ad_state, a.ad_postal_code,
+            c.c_payment_email, c.c_payment_postal_code
         FROM customer c
         LEFT JOIN address a ON c.customer_ID = a.customer_ID
-        LEFT JOIN payment_method pm ON c.customer_ID = pm.customer_ID
         WHERE c.customer_ID = %s
     """
     result = db.select(query, (session['customer'],))
@@ -39,18 +38,19 @@ def getUserCheckout():
     row = result[0]
 
     user_data = {
-        "customer_ID": row['customer_ID'],
-        "first_name": row['c_first_name'],
-        "last_name": row['c_last_name'],
-        "address_line1": row['ad_street'],
-        "city": row['ad_city'],
-        "state": row['ad_state'],
-        "postal_code": row['ad_postal_code'],
-        "email": row['c_email'],
-        "phone_number": row['c_phone_number'],
-        "payment_email": row['payment_email'],
-        "payment_postal_code": row['payment_postal_code']
-    }
+    "customer_ID": row['customer_ID'],
+    "first_name": row['c_first_name'],
+    "last_name": row['c_last_name'],
+    "address_line1": row['ad_street'],
+    "city": row['ad_city'],
+    "state": row['ad_state'],
+    "postal_code": row['ad_postal_code'],
+    "email": row['c_email'],
+    "phone_number": row['c_phone_number'],
+    "payment_email": row['c_payment_email'],
+    "payment_postal_code": row['c_payment_postal_code']
+}
+
     return user_data
 
 

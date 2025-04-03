@@ -83,7 +83,7 @@
                     </ul>
 
                     <form class="header-form">
-                        <input type="text" placeholder="Search anything...">
+                        <input type="text" value="Search anything...">
                         <button><i class="fas fa-search"></i></button>
                     </form>
 
@@ -147,9 +147,9 @@
                                         <tr>
                                                 <td class="table-image"><img src="static/images/product-images/{{item['image']}}" alt="product"></td>
                                                 <td class="table-name"><h6>{{item['name']}}</h6></td>
-                                                <td class="table-price"><h6>${{item['price']}}0</h6></td>
+                                                <td class="table-price"><h6>${{item['price']}}</h6></td>
                                                 <td class="table-brand"><h6>{{item['quantity']}}</h6></td>
-                                                 <td class="table-brand"><h6>${{'%.2f'|format(item['total_price'])}}0</h6></td>
+                                                 <td class="table-brand"><h6>${{item['total_price']}}</h6></td>
                                                 <td class="table-action">
                                                     <a class="view" href="#" title="Edit Amount" data-bs-toggle="modal" data-bs-target="#product-view-{{key}}"><i class="fas fa-edit"></i></a>
                                                     <form action="{{ url_for('delete_cart_item', product_id=key) }}" method="POST">
@@ -177,7 +177,7 @@
         
                                                             </div>
                                                         </div>
-                                                        <form method="POST" action="{{ url_for('edit_checkout_item', product_id=key)}}">
+                                                        <form method="POST" action="{{ url_for('edit_checkout_item', product_id=key)}}" style="text-align: center;">
                                                             <div class="col-md-6 col-lg-6">
                                                                 <div class="view-details">
                                                                     <h3 class="view-name">
@@ -189,14 +189,14 @@
                                                                         <p>Placement: ${{ item['earplacement'] }}</p>
                                                                     </div>
                                                                     <h3 class="view-price">
-                                                                        <span>${{ '%.2f'|format(item['price']) }}</span>
+                                                                        <span>${{item['price'] }}</span>
                                                                     </h3>
                                                                     <p class="view-desc">
                                                                         <span>{{item['desc']}}</span>
                                                                     </p>
                                                                     <div class="view-add-group">
                                                                         <!-- This button now submits the form for a manual update -->
-                                                                        <button type="button" name="action" value="update" class="product-add" title="Update Cart">
+                                                                        <button type="submit" name="action" value="update" class="product-add" title="Update Cart">
                                                                             <span>Tap to change amount</span>
                                                                         </button>
                                                                         <div class="product-action">
@@ -238,7 +238,7 @@
                                     <ul>
                                         <li>
                                             <span>Total</span>
-                                            <span>${{'%.2f'|format(total)}}0</span>
+                                            <span>${{'%.2f'|format(total)}}</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -293,6 +293,7 @@
                                     <div class="col-md-6 col-lg-4 alert fade show">
                                         <div class="payment-card payment active">
                                             <h5>{{ user1.payment_email }}</h5>
+                                            <h5>{{user1.payment_postal_code}}</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -305,13 +306,13 @@
                         <div class="modal-dialog modal-dialog-centered"> 
                             <div class="modal-content">
                                 <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
-                                <form class="modal-form" action="{{url_for('editinfo')}}" method="post">
+                                <form class="modal-form" action="/editinfo" method="post">
                                     <div class="form-title">
                                         <h3>Edit contact number</h3>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">number</label>
-                                        <input class="form-control" name="number" type="number" placeholder ="{{user1['phone_number']}}">
+                                        <input class="form-control" name="number" type="number" value ="{{user1['phone_number']}}">
                                         
                                     </div>
                                     <button class="form-btn" type="submit">save contact number</button>
@@ -326,26 +327,27 @@
                         <div class="modal-dialog modal-dialog-centered"> 
                             <div class="modal-content">
                                 <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
-                                <form class="modal-form" action="{{url_for('editinfo')}}" method="post">
+                                <form class="modal-form" action="/editinfo" method="post">
                                     <div class="form-title">
                                         <h3>edit address info</h3>
                                     </div>
 
                                     <div class="form-group">
                                         <label class="form-label">Street</label>
-                                        <input type="text" name="street" class="form-control" placeholder="{{user1['street']}}"></input>
+                                        <input type="text" name="street" class="form-control" value="{{ user1.address_line1 }}"
+                                        ></input>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">City</label>
-                                        <input type="text" name="city" class="form-control" placeholder="{{user1['city']}}"></input>
+                                        <input type="text" name="city" class="form-control" value="{{user1.city}}"></input>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">State</label>
-                                        <input type="text" name="state" class="form-control" placeholder="{{user1['state']}}"></input>
+                                        <input type="text" name="state" class="form-control" value="{{user1.state}}"></input>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Postal code</label>
-                                        <input type="text" name="postal_code" class="form-control" placeholder="{{user1['postal_code']}}"></input>
+                                        <input type="text" name="postal_code" class="form-control" value="{{user1.postal_code}}"></input>
                                     </div>
                                     <button class="form-btn" type="submit">Save address info</button>
                                     <input type="hidden" name="page" value="/checkout">
@@ -368,13 +370,13 @@
                                     <!-- PayPal Email -->
                                     <div class="form-group">
                                         <label class="form-label">PayPal Email</label>
-                                        <input class="form-control" name="paypal_email" type="email" value="{{ user1.payment_email | default('') }}">
+                                        <input class="form-control" name="paypal_email" type="email" value="{{ user1.payment_email }}">
                                     </div>
 
                                     <!-- Postal Code (ZIP) -->
                                     <div class="form-group">
                                         <label class="form-label">Zip Code</label>
-                                        <input class="form-control" name="paypal_postal_code" type="text" value="{{ user1.payment_postal_code | default('') }}">
+                                        <input class="form-control" name="paypal_postal_code" type="text" value="{{ user1.payment_postal_code }}">
                                     </div>
 
                                     <!-- Submit -->
